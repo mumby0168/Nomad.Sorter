@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nomad.Sorter.Application\Nomad.Sorter.Application.csproj" />
+    <ProjectReference Include="..\Nomad.Sorter.Infrastructure\Nomad.Sorter.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
