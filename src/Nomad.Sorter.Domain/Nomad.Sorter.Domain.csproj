@@ -10,5 +10,9 @@
     <PackageReference Include="IEvangelist.Azure.CosmosRepository" Version="2.10.1" />
     <PackageReference Include="Mumby0168.CleanArchitecture.Exceptions" Version="1.0.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="Nomad.Sorter.Unit.Tests" />
+  </ItemGroup>
 
 </Project>

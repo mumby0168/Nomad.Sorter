@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Enums;
+using Nomad.Sorter.Domain.Identitifiers;
 using Nomad.Sorter.Domain.ValueObjects;
 using Xunit;
 
@@ -47,5 +48,22 @@ public class BayTests
         bay.DockingInformation!.ParcelCapacity.Should().Be(50);
         bay.DockingInformation.DepartingUtc.Should()
             .BeCloseTo(DateTime.UtcNow.AddMinutes(30), TimeSpan.FromSeconds(1));
+    }
+
+    [Fact]
+    public void Constructor_BayId_CreatesBay()
+    {
+        //Arrange
+        var bayId = new BayId("YRK001");
+        
+        //Act
+        var bay = new Bay(bayId);
+        
+        //Assert
+        bay.Id.Should().Be("YRK001");
+        bay.BayId.Should().Be(bayId);
+        bay.Status.Should().Be(BayStatus.Empty);
+        bay.PartitionKey.Should().Be(nameof(Bay));
+        bay.DockingInformation.Should().BeNull();
     }
 }
