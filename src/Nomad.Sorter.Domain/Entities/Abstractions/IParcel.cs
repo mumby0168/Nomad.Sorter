@@ -4,6 +4,9 @@ using Nomad.Sorter.Domain.ValueObjects;
 
 namespace Nomad.Sorter.Domain.Entities.Abstractions;
 
+/// <summary>
+/// Represents a parcel placed into the sorter.
+/// </summary>
 public interface IParcel
 {
     /// <summary>
@@ -15,11 +18,6 @@ public interface IParcel
     /// The status of the parcel.
     /// </summary>
     ParcelStatus Status { get; }
-
-    /// <summary>
-    /// The region in which the parcel will be delivered.
-    /// </summary>
-    string DeliveryRegionId { get; }
 
     /// <summary>
     /// The delivery information for the parcel.
