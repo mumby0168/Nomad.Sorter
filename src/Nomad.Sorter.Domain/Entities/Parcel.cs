@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Domain.Enums;
+using Nomad.Sorter.Domain.Extensions;
 using Nomad.Sorter.Domain.Identitifiers;
 using Nomad.Sorter.Domain.ValueObjects;
 
@@ -18,19 +19,25 @@ public class Parcel : BaseEntity, IParcel
     
     /// <inheritdoc cref="IParcel"/>
     public DeliveryInformation DeliveryInformation { get; }
+    
+    /// <inheritdoc cref="IParcel"/>
+    public ClientId ClientId { get; }
+    
 
     /// <summary>
     /// Creates an instance of a parcel.
     /// </summary>
     /// <param name="parcelId">The <see cref="ParcelId"/></param>
     /// <param name="deliveryInformation">The<see cref="DeliveryInformation"/> about the parcel</param>
+    /// <param name="clientId">The ID of the client</param>
     /// <remarks>This creates a parcel with the <see cref="ParcelStatus"/> PreAdvice</remarks>
-    internal Parcel(ParcelId parcelId, DeliveryInformation deliveryInformation) : base(deliveryInformation.RegionId)
+    internal Parcel(ParcelId parcelId, DeliveryInformation deliveryInformation, ClientId clientId) : base(deliveryInformation.RegionId)
     {
         Id = parcelId;
         ParcelId = parcelId;
         Status = ParcelStatus.PreAdvice;
         DeliveryInformation = deliveryInformation;
+        ClientId = clientId;
     }
 
     /// <summary>
@@ -39,15 +46,18 @@ public class Parcel : BaseEntity, IParcel
     /// <param name="id">The ID of the parcel</param>
     /// <param name="status">The <see cref="ParcelStatus"/> of the parcel.</param>
     /// <param name="deliveryInformation">The <see cref="DeliveryInformation"/> about the parcel</param>
+    /// <param name="clientId">The ID of the client</param>
     [JsonConstructor]
     private Parcel(
         string id,
         ParcelStatus status,
-        DeliveryInformation deliveryInformation) : base(deliveryInformation.RegionId)
+        DeliveryInformation deliveryInformation,
+        ClientId clientId) : base(deliveryInformation.RegionId)
     {
         Id = id;
         ParcelId = id.ToParcelId();
         Status = status;
         DeliveryInformation = deliveryInformation;
+        ClientId = clientId;
     }
 }

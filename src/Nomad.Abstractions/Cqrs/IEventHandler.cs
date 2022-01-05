@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Nomad.Sorter.Application.Abstractions;
+namespace Nomad.Abstractions.Cqrs;
 
 public interface IEventHandler<in T> : INotificationHandler<T> where T : IEvent
 {

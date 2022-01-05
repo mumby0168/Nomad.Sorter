@@ -52,14 +52,16 @@ public class ParcelTests
         //Arrange
         var deliveryInformation = new DeliveryInformation(Guid.NewGuid().ToString(), "HU12F43");
         var parcelId = new ParcelId(Guid.NewGuid().ToString("N"));
+        var clientId = new ClientId("CAMP123");
 
         //Act
-        var parcel = new Parcel(parcelId, deliveryInformation);
+        var parcel = new Parcel(parcelId, deliveryInformation, clientId);
         
         //Assert
         parcel.Id.Should().Be(parcelId.ToString());
         parcel.PartitionKey.Should().Be(deliveryInformation.RegionId);
         parcel.Status.Should().Be(ParcelStatus.PreAdvice);
         parcel.DeliveryInformation.Should().Be(deliveryInformation);
+        parcel.ClientId.Should().Be(clientId);
     }
 }

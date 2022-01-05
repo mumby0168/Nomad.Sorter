@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="IEvangelist.Azure.CosmosRepository" Version="2.10.1" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.0" />
+    <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.3.0" />
   </ItemGroup>
 
   <ItemGroup>

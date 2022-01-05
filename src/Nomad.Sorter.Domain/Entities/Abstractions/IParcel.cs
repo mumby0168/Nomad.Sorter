@@ -23,4 +23,9 @@ public interface IParcel
     /// The delivery information for the parcel.
     /// </summary>
     DeliveryInformation DeliveryInformation { get; }
+    
+    /// <summary>
+    /// The ID of the client this parcel is been distributed for.
+    /// </summary>
+    ClientId ClientId { get; }
 }

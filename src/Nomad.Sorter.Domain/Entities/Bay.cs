@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Domain.Enums;
+using Nomad.Sorter.Domain.Extensions;
 using Nomad.Sorter.Domain.Identitifiers;
 using Nomad.Sorter.Domain.ValueObjects;
 

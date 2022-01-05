@@ -1,4 +1,6 @@
-namespace Nomad.Sorter.Domain.Identitifiers;
+using Nomad.Sorter.Domain.Identitifiers;
+
+namespace Nomad.Sorter.Domain.Extensions;
 
 public static class IdentifierExtensions
 {
@@ -6,5 +8,8 @@ public static class IdentifierExtensions
         new(value);
     
     public static ParcelId ToParcelId(this string value) =>
+        new(value);
+
+    public static ClientId ToClientId(this string value) =>
         new(value);
 }

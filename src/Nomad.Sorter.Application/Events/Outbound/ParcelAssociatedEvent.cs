@@ -1,4 +1,4 @@
-using Nomad.Sorter.Application.Abstractions;
+using Nomad.Abstractions.Cqrs;
 
 namespace Nomad.Sorter.Application.Events.Outbound;
 
