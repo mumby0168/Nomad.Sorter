@@ -7,5 +7,6 @@ public record VehicleDockedEvent(
     string DeliveryRegionId,
     string BayId,
     int ParcelCapacity,
-    DateTime DepartingUtc
+    DateTime DepartingUtc,
+    DateTime DockedAtUtc
 ) : IEvent;
