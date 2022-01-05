@@ -19,6 +19,12 @@ public class Parcel : BaseEntity, IParcel
     /// <inheritdoc cref="IParcel"/>
     public DeliveryInformation DeliveryInformation { get; }
 
+    /// <summary>
+    /// Creates an instance of a parcel.
+    /// </summary>
+    /// <param name="parcelId">The <see cref="ParcelId"/></param>
+    /// <param name="deliveryInformation">The<see cref="DeliveryInformation"/> about the parcel</param>
+    /// <remarks>This creates a parcel with the <see cref="ParcelStatus"/> PreAdvice</remarks>
     internal Parcel(ParcelId parcelId, DeliveryInformation deliveryInformation) : base(deliveryInformation.RegionId)
     {
         Id = parcelId;
@@ -27,6 +33,12 @@ public class Parcel : BaseEntity, IParcel
         DeliveryInformation = deliveryInformation;
     }
 
+    /// <summary>
+    /// Creates an instance of a parcel been deserialized from JSON.
+    /// </summary>
+    /// <param name="id">The ID of the parcel</param>
+    /// <param name="status">The <see cref="ParcelStatus"/> of the parcel.</param>
+    /// <param name="deliveryInformation">The <see cref="DeliveryInformation"/> about the parcel</param>
     [JsonConstructor]
     private Parcel(
         string id,
