@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Domain.Enums;
 using Nomad.Sorter.Domain.Extensions;
@@ -15,6 +16,7 @@ public class Parcel : BaseEntity, IParcel
     public ParcelId ParcelId { get; }
 
     /// <inheritdoc cref="IParcel"/>
+    [JsonConverter(typeof(StringEnumConverter))]
     public ParcelStatus Status { get; }
     
     /// <inheritdoc cref="IParcel"/>

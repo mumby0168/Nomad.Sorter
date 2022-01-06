@@ -1,6 +1,7 @@
 using Nomad.Sorter.Application.Extensions;
 using Nomad.Sorter.Domain.Extensions;
 using Nomad.Sorter.Infrastructure.Extensions;
+using Nomad.Sorter.Web.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,5 +14,7 @@ services.AddNomadSorterInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 app.MapGet("/", () => "Nomad.Sorter");
+
+app.MapDemoRoutes();
 
 app.Run();

@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
+using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed;
+using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
 using Nomad.Sorter.Infrastructure.Cosmos.Repositories;
 
@@ -30,6 +32,8 @@ public static class CosmosExtensions
         });
 
         services.AddSingleton<IParcelRepository, ParcelRepository>();
+        services.AddHostedService<ChangeFeedProcessorService>();
+        services.AddSingleton<IChangeFeedItemProcessor<Parcel>, ParcelChangeFeedProcessor>();
 
         return services;
     }
@@ -40,5 +44,5 @@ public static class CosmosExtensions
             "a IParcel must be convertible to a Parcel in order to be stored in Cosmos DB");
 
     public static ParcelIdLookup ToParcelIdLookup(this IParcel parcel) =>
-        new(parcel.ParcelId);
+        new(parcel.ParcelId, parcel.DeliveryInformation.RegionId);
 }

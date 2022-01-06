@@ -6,14 +6,17 @@ namespace Nomad.Sorter.Infrastructure.Cosmos.Items;
 
 public class ParcelIdLookup : FullItem
 {
+    public ParcelIdLookup(string id, string deliveryRegionId)
+    {
+        Id = id;
+        PartitionKey = id;
+        DeliveryRegionId = deliveryRegionId;
+    }
+    
     [JsonProperty("pk")]
     public string PartitionKey { get; set; }
 
+    public string DeliveryRegionId { get; set; }
+    
     protected override string GetPartitionKeyValue() => PartitionKey;
-
-    public ParcelIdLookup(ParcelId parcelId)
-    {
-        Id = parcelId;
-        PartitionKey = parcelId;
-    }
 }
