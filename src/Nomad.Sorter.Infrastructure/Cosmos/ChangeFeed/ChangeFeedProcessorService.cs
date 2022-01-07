@@ -39,7 +39,7 @@ public class ChangeFeedProcessorService : BackgroundService
         Database database = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_repositoryOptions.Value.DatabaseId,
             cancellationToken: stoppingToken);
         
-        Container leastContainer =
+        Container leaseContainer =
             await database.CreateContainerIfNotExistsAsync("lease", "/id", cancellationToken: stoppingToken);
 
         //TODO: For a library a setup to define which containers you want to listen from would be best.
@@ -52,7 +52,7 @@ public class ChangeFeedProcessorService : BackgroundService
                 _logger.LogError(exception, "Failed {Token}", token);
                 return Task.CompletedTask;
             })
-            .WithLeaseContainer(leastContainer)
+            .WithLeaseContainer(leaseContainer)
             .WithInstanceName(Environment.MachineName)
             .Build();
         
