@@ -38,9 +38,11 @@ public class ChangeFeedProcessorService : BackgroundService
         
         Database database = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_repositoryOptions.Value.DatabaseId,
             cancellationToken: stoppingToken);
+        
         Container leastContainer =
             await database.CreateContainerIfNotExistsAsync("lease", "/id", cancellationToken: stoppingToken);
 
+        //TODO: For a library a setup to define which containers you want to listen from would be best.
         var parcelsContainer = database.GetContainer("parcels");
 
         var changeFeedProcessor = parcelsContainer
