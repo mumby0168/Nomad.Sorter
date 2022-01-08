@@ -1,13 +1,13 @@
-using System.Security.AccessControl;
 using Microsoft.Azure.CosmosRepository;
+using Microsoft.Azure.CosmosRepository.ChangeFeed;
 using Microsoft.Extensions.Logging;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Enums;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
 
-namespace Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
+namespace Nomad.Sorter.Infrastructure.Cosmos.Processors;
 
-public class ParcelChangeFeedProcessor : IChangeFeedItemProcessor<Parcel>
+public class ParcelChangeFeedProcessor : IItemChangeFeedProcessor<Parcel>
 {
     private readonly ILogger<ParcelChangeFeedProcessor> _logger;
     private readonly IRepository<ParcelLookupByParcelIdItem> _lookupRepository;

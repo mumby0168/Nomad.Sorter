@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.CosmosRepository;
+using Microsoft.Azure.CosmosRepository.ChangeFeed;
 using Moq;
 using Moq.AutoMock;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.ValueObjects;
-using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed;
-using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
+using Nomad.Sorter.Infrastructure.Cosmos.Processors;
 using Nomad.Testing;
 using Xunit;
 
@@ -18,7 +18,7 @@ public class ParcelChangeFeedProcessorTests
     private readonly AutoMocker _mocker = new();
     private readonly Mock<IRepository<ParcelLookupByParcelIdItem>> _lookupRepository;
 
-    private IChangeFeedItemProcessor<Parcel> CreateSut() => _mocker.CreateInstance<ParcelChangeFeedProcessor>();
+    private IItemChangeFeedProcessor<Parcel> CreateSut() => _mocker.CreateInstance<ParcelChangeFeedProcessor>();
 
     public ParcelChangeFeedProcessorTests() =>
         _lookupRepository = _mocker.GetMock<IRepository<ParcelLookupByParcelIdItem>>();

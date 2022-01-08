@@ -1,0 +1,3 @@
+[submodule "libs/azure-cosmos-dotnet-repository"]
+	path = libs/azure-cosmos-dotnet-repository
+	url = https://github.com/IEvangelist/azure-cosmos-dotnet-repository.git
