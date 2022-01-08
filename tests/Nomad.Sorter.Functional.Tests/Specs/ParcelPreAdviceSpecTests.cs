@@ -15,9 +15,13 @@ public class ParcelPreAdviceSpecTests : NomadSorterFunctionalTest
     public async Task Pre_Advice_Received_Is_Consumed_Correctly()
     {
         //Arrange
-        var command = new ParcelPreAdviceCommand(Guid.NewGuid().ToString("N"),
-            "CLIENT123", Guid.NewGuid().ToString(), "HU115TG");
-        
+        var command = new ParcelPreAdviceCommand(
+            Guid.NewGuid().ToString("N"),
+            "CLIENT123",
+            Guid.NewGuid().ToString(),
+            "HU115TG"
+        );
+
         //Act
         await ConsumerInvoker.Invoke<ParcelPreAdviceCommand, ParcelPreAdviceCommandConsumer>(command);
         await ParcelChangeFeedInvoker.InvokeFor(command.ParcelId, command.DeliveryRegionId);
