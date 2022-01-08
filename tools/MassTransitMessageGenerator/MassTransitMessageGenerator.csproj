@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+      <UserSecretsId>25781cf5-60f2-4ebb-a67a-43113efac50b</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Nomad.Sorter.Application\Nomad.Sorter.Application.csproj" />
+      <ProjectReference Include="..\..\src\Nomad.Sorter.Infrastructure\Nomad.Sorter.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit.AspNetCore" Version="7.3.0" />
+      <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.3.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+</Project>

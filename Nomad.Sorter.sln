@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepositoryTests", "libs\azure-cosmos-dotnet-repository\Microsoft.Azure.CosmosRepository\test\Microsoft.Azure.CosmosRepositoryTests.csproj", "{B2EA502E-A711-4049-9585-A4CE25233FF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3116A177-E756-4A6A-AA33-546B25991C8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransitMessageGenerator", "tools\MassTransitMessageGenerator\MassTransitMessageGenerator.csproj", "{D7D566D2-FE73-477D-9418-D1190187DFAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +86,10 @@ Global
 		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8943EFDA-4279-45FC-93D5-9CC1316C723B} = {39415ED4-026E-4D99-8E38-7A98CF291C48}
@@ -96,5 +104,6 @@ Global
 		{8601B39A-F3E9-4DAE-9223-0CB1F3B9BE2D} = {39415ED4-026E-4D99-8E38-7A98CF291C48}
 		{F7897BEC-D438-46D7-8D35-7C40A070B4FC} = {BF688252-2E24-4FB1-A21B-D6F122797907}
 		{B2EA502E-A711-4049-9585-A4CE25233FF6} = {BF688252-2E24-4FB1-A21B-D6F122797907}
+		{D7D566D2-FE73-477D-9418-D1190187DFAB} = {3116A177-E756-4A6A-AA33-546B25991C8F}
 	EndGlobalSection
 EndGlobal
