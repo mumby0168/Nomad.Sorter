@@ -75,14 +75,12 @@ public class ChangeFeedProcessorService : BackgroundService
         foreach (var change in changes)
         {
             var typeToken = change["type"];
-
             if (typeToken is null)
             {
                 _logger.LogInformation("Item does not have required type field {Json}", change.ToString());
             }
 
             var type = typeToken.Value<string>();
-
             var task = type switch
             {
                 nameof(Parcel) => InvokeHandler(typeof(Parcel), change, cancellationToken),

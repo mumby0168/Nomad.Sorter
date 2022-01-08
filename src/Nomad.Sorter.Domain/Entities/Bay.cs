@@ -11,7 +11,6 @@ namespace Nomad.Sorter.Domain.Entities;
 
 public class Bay : BaseEntity, IBay
 {
-    
     /// <inheritdoc cref="IBay"/>
     [JsonIgnore]
     public BayId BayId { get; }
