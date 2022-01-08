@@ -24,7 +24,6 @@ public class ParcelPreAdviceSpecTests : NomadSorterFunctionalTest
 
         //Act
         await ConsumerInvoker.Invoke<ParcelPreAdviceCommand, ParcelPreAdviceCommandConsumer>(command);
-        await ParcelChangeFeedInvoker.InvokeFor(command.ParcelId, command.DeliveryRegionId);
 
         //Assert
         var parcel = await ParcelRepository.GetAsync(command.ParcelId, command.DeliveryRegionId);

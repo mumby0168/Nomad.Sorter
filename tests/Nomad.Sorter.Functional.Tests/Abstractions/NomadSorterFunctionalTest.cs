@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using Microsoft.Azure.CosmosRepository;
+using Microsoft.Azure.CosmosRepository.ChangeFeed.InMemory;
 using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Functional.Tests.Factory;
@@ -17,7 +18,6 @@ public abstract class NomadSorterFunctionalTest
     protected readonly IServiceProvider ServiceProvider;
     protected readonly MassTransitConsumerInvoker ConsumerInvoker;
     protected readonly IRepository<Parcel> ParcelRepository;
-    protected readonly ChangeFeedProcessorInvoker<Parcel> ParcelChangeFeedInvoker;
     protected readonly IRepository<ParcelLookupByParcelIdItem> ParcelIdLookupRepository;
 
     protected NomadSorterFunctionalTest()
@@ -27,7 +27,10 @@ public abstract class NomadSorterFunctionalTest
         ServiceProvider = factory.Services;
         ConsumerInvoker = ServiceProvider.GetRequiredService<MassTransitConsumerInvoker>();
         ParcelRepository = ServiceProvider.GetRequiredService<IRepository<Parcel>>();
-        ParcelChangeFeedInvoker = ServiceProvider.GetRequiredService<ChangeFeedProcessorInvoker<Parcel>>();
         ParcelIdLookupRepository = ServiceProvider.GetRequiredService<IRepository<ParcelLookupByParcelIdItem>>();
+        SetupInMemoryChangeFeeds();
     }
+
+    private void SetupInMemoryChangeFeeds() => 
+        ServiceProvider.GetRequiredService<InMemoryChangeFeed<Parcel>>().Setup();
 }
