@@ -1,6 +1,6 @@
 using Microsoft.Azure.CosmosRepository;
+using Microsoft.Azure.CosmosRepository.ChangeFeed;
 using Microsoft.Extensions.DependencyInjection;
-using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed;
 
 namespace Nomad.Testing.ChangeFeed;
 
@@ -20,7 +20,7 @@ public class ChangeFeedProcessorInvoker<T> where T : IItem
         var data = await _repository.GetAsync(id, partitionKey);
         
         _serviceProvider
-            .GetRequiredService<IChangeFeedItemProcessor<T>>()?
+            .GetRequiredService<IItemChangeFeedProcessor<T>>()?
             .HandleAsync(data, default);
     }
 }

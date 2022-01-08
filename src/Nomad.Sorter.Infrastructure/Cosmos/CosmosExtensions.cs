@@ -2,9 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
-using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed;
-using Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
+using Nomad.Sorter.Infrastructure.Cosmos.Processors;
 using Nomad.Sorter.Infrastructure.Cosmos.Repositories;
 
 namespace Nomad.Sorter.Infrastructure.Cosmos;
@@ -23,7 +22,8 @@ public static class CosmosExtensions
             x.ContainerBuilder.Configure<Parcel>(parcelContainerOptions => parcelContainerOptions
                 .WithContainer(CosmosConstants.Containers.Parcels)
                 .WithPartitionKey(CosmosConstants.DefaultPartitionKey)
-                .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
+                .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive)
+                .WithChangeFeedMonitoring());
 
             x.ContainerBuilder.Configure<ParcelLookupByParcelIdItem>(parcelContainerOptions => parcelContainerOptions
                 .WithContainer(CosmosConstants.Containers.Parcels)
@@ -31,9 +31,10 @@ public static class CosmosExtensions
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
         });
 
+        services.AddCosmosRepositoryItemChangeFeedProcessorsFromAssemblyContainingType<ParcelChangeFeedProcessor>();
+        services.AddHostedService<ChangeFeedHostedService>();
+
         services.AddSingleton<IParcelRepository, ParcelRepository>();
-        services.AddHostedService<ChangeFeedProcessorService>();
-        services.AddSingleton<IChangeFeedItemProcessor<Parcel>, ParcelChangeFeedProcessor>();
 
         return services;
     }
