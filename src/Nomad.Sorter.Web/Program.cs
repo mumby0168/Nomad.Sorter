@@ -18,3 +18,5 @@ app.MapGet("/", () => "Nomad.Sorter");
 app.MapDemoRoutes();
 
 app.Run();
+
+public partial class Program {}

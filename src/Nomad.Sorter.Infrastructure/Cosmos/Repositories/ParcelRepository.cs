@@ -12,10 +12,10 @@ namespace Nomad.Sorter.Infrastructure.Cosmos.Repositories;
 public class ParcelRepository : IParcelRepository
 {
     private readonly IRepository<Parcel> _parcelCosmosRepository;
-    private readonly IRepository<ParcelIdLookup> _parcelIdLookupCosmosRepository;
+    private readonly IRepository<ParcelLookupByParcelIdItem> _parcelIdLookupCosmosRepository;
 
     public ParcelRepository(IRepository<Parcel> parcelCosmosRepository,
-        IRepository<ParcelIdLookup> parcelIdLookupCosmosRepository)
+        IRepository<ParcelLookupByParcelIdItem> parcelIdLookupCosmosRepository)
     {
         _parcelCosmosRepository = parcelCosmosRepository;
         _parcelIdLookupCosmosRepository = parcelIdLookupCosmosRepository;

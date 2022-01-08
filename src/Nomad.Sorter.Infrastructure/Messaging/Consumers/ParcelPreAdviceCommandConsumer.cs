@@ -24,7 +24,7 @@ public class ParcelPreAdviceCommandConsumer : IConsumer<ParcelPreAdviceCommand>
                 "Processing parcel pre advice for parcel with ID {ParcelId} and client ID {ClientId}",
                 context.Message.ParcelId, context.Message.ClientId);
 
-            await _mediator.Send(context.Message, context.CancellationToken);
+            await _mediator.Publish(context.Message, context.CancellationToken);
 
             _logger.LogInformation(
                 "Successfully processed parcel pre advice for parcel with ID {ParcelId} and client ID {ClientId}",

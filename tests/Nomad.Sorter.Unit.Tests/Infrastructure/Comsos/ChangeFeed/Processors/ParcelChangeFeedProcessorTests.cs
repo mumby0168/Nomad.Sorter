@@ -16,12 +16,12 @@ namespace Nomad.Sorter.Unit.Tests.Infrastructure.Comsos.ChangeFeed.Processors;
 public class ParcelChangeFeedProcessorTests
 {
     private readonly AutoMocker _mocker = new();
-    private readonly Mock<IRepository<ParcelIdLookup>> _lookupRepository;
+    private readonly Mock<IRepository<ParcelLookupByParcelIdItem>> _lookupRepository;
 
     private IChangeFeedItemProcessor<Parcel> CreateSut() => _mocker.CreateInstance<ParcelChangeFeedProcessor>();
 
     public ParcelChangeFeedProcessorTests() =>
-        _lookupRepository = _mocker.GetMock<IRepository<ParcelIdLookup>>();
+        _lookupRepository = _mocker.GetMock<IRepository<ParcelLookupByParcelIdItem>>();
 
     [Fact]
     public async Task HandleAsync_ParcelAtStatusPreAdvice_InsertLookupRecord()
@@ -39,7 +39,7 @@ public class ParcelChangeFeedProcessorTests
         //Assert
         _lookupRepository.Verify(o =>
             o.UpdateAsync(
-                It.Is<ParcelIdLookup>(x =>
+                It.Is<ParcelLookupByParcelIdItem>(x =>
                     x.Id == parcel.Id && x.PartitionKey == parcel.Id &&
                     x.DeliveryRegionId == parcel.DeliveryInformation.RegionId), default, false));
     }

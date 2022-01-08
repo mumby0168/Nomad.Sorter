@@ -4,9 +4,9 @@ using Nomad.Sorter.Domain.Identitifiers;
 
 namespace Nomad.Sorter.Infrastructure.Cosmos.Items;
 
-public class ParcelIdLookup : FullItem
+public class ParcelLookupByParcelIdItem : FullItem
 {
-    public ParcelIdLookup(string id, string deliveryRegionId)
+    public ParcelLookupByParcelIdItem(string id, string deliveryRegionId)
     {
         Id = id;
         PartitionKey = id;

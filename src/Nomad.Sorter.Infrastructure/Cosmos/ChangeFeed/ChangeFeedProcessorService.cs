@@ -107,8 +107,13 @@ public class ChangeFeedProcessorService : BackgroundService
 
         handlerType ??= Handlers[itemType];
         
-        await (ValueTask) handlerType.GetMethod("HandleAsync")?
-            .Invoke(_serviceProvider.GetRequiredService(handlerType), new[] {item, cancellationToken})!;
+        var response = handlerType.GetMethod("HandleAsync")?
+            .Invoke(_serviceProvider.GetRequiredService(handlerType), new[] {item, cancellationToken});
+
+        if (response is ValueTask valueTask)
+        {
+            await valueTask;
+        }
     }
 
 

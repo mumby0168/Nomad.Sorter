@@ -10,9 +10,9 @@ namespace Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
 public class ParcelChangeFeedProcessor : IChangeFeedItemProcessor<Parcel>
 {
     private readonly ILogger<ParcelChangeFeedProcessor> _logger;
-    private readonly IRepository<ParcelIdLookup> _lookupRepository;
+    private readonly IRepository<ParcelLookupByParcelIdItem> _lookupRepository;
 
-    public ParcelChangeFeedProcessor(ILogger<ParcelChangeFeedProcessor> logger, IRepository<ParcelIdLookup> lookupRepository)
+    public ParcelChangeFeedProcessor(ILogger<ParcelChangeFeedProcessor> logger, IRepository<ParcelLookupByParcelIdItem> lookupRepository)
     {
         _logger = logger;
         _lookupRepository = lookupRepository;
@@ -24,7 +24,7 @@ public class ParcelChangeFeedProcessor : IChangeFeedItemProcessor<Parcel>
         
         if (parcel.Status is ParcelStatus.PreAdvice)
         {
-            await _lookupRepository.UpdateAsync(parcel.ToParcelIdLookup(), cancellationToken);
+            await _lookupRepository.UpdateAsync(parcel.ToParcelLookupByParcelIdItem(), cancellationToken);
         }
     }
 }

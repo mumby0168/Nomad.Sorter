@@ -25,7 +25,7 @@ public static class CosmosExtensions
                 .WithPartitionKey(CosmosConstants.DefaultPartitionKey)
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
 
-            x.ContainerBuilder.Configure<ParcelIdLookup>(parcelContainerOptions => parcelContainerOptions
+            x.ContainerBuilder.Configure<ParcelLookupByParcelIdItem>(parcelContainerOptions => parcelContainerOptions
                 .WithContainer(CosmosConstants.Containers.Parcels)
                 .WithPartitionKey(CosmosConstants.DefaultPartitionKey)
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
@@ -43,6 +43,6 @@ public static class CosmosExtensions
         throw new InvalidOperationException(
             "a IParcel must be convertible to a Parcel in order to be stored in Cosmos DB");
 
-    public static ParcelIdLookup ToParcelIdLookup(this IParcel parcel) =>
+    public static ParcelLookupByParcelIdItem ToParcelLookupByParcelIdItem(this IParcel parcel) =>
         new(parcel.ParcelId, parcel.DeliveryInformation.RegionId);
 }
