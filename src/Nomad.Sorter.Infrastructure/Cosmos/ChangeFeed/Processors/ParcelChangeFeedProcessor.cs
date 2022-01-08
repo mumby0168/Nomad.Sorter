@@ -1,0 +1,30 @@
+using System.Security.AccessControl;
+using Microsoft.Azure.CosmosRepository;
+using Microsoft.Extensions.Logging;
+using Nomad.Sorter.Domain.Entities;
+using Nomad.Sorter.Domain.Enums;
+using Nomad.Sorter.Infrastructure.Cosmos.Items;
+
+namespace Nomad.Sorter.Infrastructure.Cosmos.ChangeFeed.Processors;
+
+public class ParcelChangeFeedProcessor : IChangeFeedItemProcessor<Parcel>
+{
+    private readonly ILogger<ParcelChangeFeedProcessor> _logger;
+    private readonly IRepository<ParcelLookupByParcelIdItem> _lookupRepository;
+
+    public ParcelChangeFeedProcessor(ILogger<ParcelChangeFeedProcessor> logger, IRepository<ParcelLookupByParcelIdItem> lookupRepository)
+    {
+        _logger = logger;
+        _lookupRepository = lookupRepository;
+    }
+    
+    public async ValueTask HandleAsync(Parcel parcel, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Parcel change being processed for parcel with {ID}", parcel.ParcelId);
+        
+        if (parcel.Status is ParcelStatus.PreAdvice)
+        {
+            await _lookupRepository.UpdateAsync(parcel.ToParcelLookupByParcelIdItem(), cancellationToken);
+        }
+    }
+}
