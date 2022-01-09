@@ -29,8 +29,7 @@ public class ParcelInductedEventHandlerTests
 
         var parcelId = NomadIdentifiers.ParcelId;
 
-        var inductedEvent = new ParcelInductedEvent(parcelId.ToString(), 
-            NomadIdentifiers.ClientId.ToString());
+        var inductedEvent = new ParcelInductedEvent(parcelId.ToString());
 
         var parcel = new Mock<IParcel>();
 

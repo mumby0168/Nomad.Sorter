@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentAssertions.Primitives;
 using Nomad.Sorter.Application.Commands;
+using Nomad.Sorter.Application.Events.Inbound;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Domain.Enums;
@@ -36,6 +37,18 @@ public class ParcelAssertions :
         parcel.ClientId.Should().Be(command.ClientId.ToClientId());
         parcel.DeliveryInformation.Postcode.Should().Be(command.DeliveryPostCode);
         parcel.DeliveryInformation.RegionId.Should().Be(command.DeliveryRegionId);
+
+        return new AndConstraint<ParcelAssertions>(this);
+    }
+    
+    public AndConstraint<ParcelAssertions> BeValidParcelFor(ParcelInductedEvent parcelInductedEvent)
+    {
+        var parcel = Subject as Parcel;
+        
+        parcel!.Should().NotBeNull();
+        parcel!.Id.Should().Be(parcel.ParcelId);
+        parcel.Status.Should().Be(ParcelStatus.Inducted);
+        parcel.InductedAtUtc.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(2));
 
         return new AndConstraint<ParcelAssertions>(this);
     }
