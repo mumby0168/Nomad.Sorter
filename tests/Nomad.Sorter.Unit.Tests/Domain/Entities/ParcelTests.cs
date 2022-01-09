@@ -1,4 +1,5 @@
 using System;
+using CleanArchitecture.Exceptions;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -63,5 +64,35 @@ public class ParcelTests
         parcel.Status.Should().Be(ParcelStatus.PreAdvice);
         parcel.DeliveryInformation.Should().Be(deliveryInformation);
         parcel.ClientId.Should().Be(clientId);
+    }
+
+    [Fact]
+    public void Inducted_ParcelNotAlreadyInducted_SetsParcelInductProperties()
+    {
+        //Arrange
+        var deliveryInformation = new DeliveryInformation(Guid.NewGuid().ToString(), "HU12F43");
+        var parcelId = new ParcelId(Guid.NewGuid().ToString("N"));
+        var clientId = new ClientId("CAMP123");
+        var parcel = new Parcel(parcelId, deliveryInformation, clientId);
+
+        //Act
+        parcel.Inducted();
+
+        parcel.Status.Should().Be(ParcelStatus.Inducted);
+        parcel.InductedAtUtc.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+    }
+    
+    [Fact]
+    public void Inducted_ParcelAlreadyInducted_ThrowsDomainException()
+    {
+        //Arrange
+        var deliveryInformation = new DeliveryInformation(Guid.NewGuid().ToString(), "HU12F43");
+        var parcelId = new ParcelId(Guid.NewGuid().ToString("N"));
+        var clientId = new ClientId("CAMP123");
+        var parcel = new Parcel(parcelId, deliveryInformation, clientId);
+        parcel.Inducted();
+
+        //Act
+        Assert.Throws<DomainException<Parcel>>(() => parcel.Inducted());
     }
 }

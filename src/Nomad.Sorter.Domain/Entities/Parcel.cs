@@ -1,3 +1,4 @@
+using CleanArchitecture.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Nomad.Sorter.Domain.Entities.Abstractions;
@@ -17,14 +18,16 @@ public class Parcel : BaseEntity, IParcel
 
     /// <inheritdoc cref="IParcel"/>
     [JsonConverter(typeof(StringEnumConverter))]
-    public ParcelStatus Status { get; }
-    
+    public ParcelStatus Status { get; private set; }
+
     /// <inheritdoc cref="IParcel"/>
     public DeliveryInformation DeliveryInformation { get; }
     
     /// <inheritdoc cref="IParcel"/>
     public ClientId ClientId { get; }
-    
+
+    /// <inheritdoc cref="IParcel"/>
+    public DateTime? InductedAtUtc { get; private set; }
 
     /// <summary>
     /// Creates an instance of a parcel.
@@ -49,17 +52,33 @@ public class Parcel : BaseEntity, IParcel
     /// <param name="status">The <see cref="ParcelStatus"/> of the parcel.</param>
     /// <param name="deliveryInformation">The <see cref="DeliveryInformation"/> about the parcel</param>
     /// <param name="clientId">The ID of the client</param>
+    /// <param name="inductedAtUtc">The time the parcel was inducted at.</param>
     [JsonConstructor]
     private Parcel(
         string id,
         ParcelStatus status,
         DeliveryInformation deliveryInformation,
-        ClientId clientId) : base(deliveryInformation.RegionId)
+        ClientId clientId,
+        DateTime? inductedAtUtc = null) : base(deliveryInformation.RegionId)
     {
         Id = id;
         ParcelId = id.ToParcelId();
         Status = status;
         DeliveryInformation = deliveryInformation;
         ClientId = clientId;
+        InductedAtUtc = inductedAtUtc;
+    }
+    
+    /// <inheritdoc cref="IParcel"/>
+    public void Inducted()
+    {
+        if (InductedAtUtc is not null)
+        {
+            throw new DomainException<Parcel>(
+                $"This parcel with ID {ParcelId} was already inducted at {InductedAtUtc}");
+        }
+        
+        Status = ParcelStatus.Inducted;
+        InductedAtUtc = DateTime.UtcNow;
     }
 }
