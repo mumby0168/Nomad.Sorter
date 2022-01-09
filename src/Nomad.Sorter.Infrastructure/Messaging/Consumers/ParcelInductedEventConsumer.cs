@@ -21,19 +21,20 @@ public class ParcelInductedEventConsumer : IConsumer<ParcelInductedEvent>
         try
         {
             _logger.LogInformation(
-                "Processing parcel inducted event for parcel with ID {ParcelId} and client ID {ClientId}",
-                context.Message.ParcelId, context.Message.ClientId);
+                "Processing parcel inducted event for parcel with ID {ParcelId}",
+                context.Message.ParcelId);
 
             await _mediator.Publish(context.Message, context.CancellationToken);
 
             _logger.LogInformation(
-                "Successfully processed parcel inducted event for parcel with ID {ParcelId} and client ID {ClientId}",
-                context.Message.ParcelId, context.Message.ClientId);
+                "Successfully processed parcel inducted event for parcel with ID {ParcelId}",
+                context.Message.ParcelId);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to process parcel inducted event for parcel with ID {ParcelId} and client ID {ClientId}",
-                context.Message.ParcelId, context.Message.ClientId);
+            _logger.LogError(e,
+                "Failed to process parcel inducted event for parcel with ID {ParcelId}",
+                context.Message.ParcelId);
 
             throw;
         }
