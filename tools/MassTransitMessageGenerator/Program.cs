@@ -34,6 +34,18 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapPost("api/commands/parcel-pre-advice",
     (ParcelPreAdviceCommand command, ISendEndpointProvider sendEndpointProvider) => sendEndpointProvider.Send(command));
 
+app.MapPost("api/commands/parcel-pre-advice/test", async (ISendEndpointProvider sendEndpointProvider) =>
+{
+    var command = new ParcelPreAdviceCommand(Guid.NewGuid().ToString("N"),
+        "ClientTest123",
+        Guid.NewGuid().ToString(),
+        "HU10TST");
+
+    await sendEndpointProvider.Send(command);
+
+    return Results.Ok(command);
+});
+
 app.MapPost("api/events/parcel-inducted",
     (ParcelInductedEvent @event, IPublishEndpoint publishEndpoint) => publishEndpoint.Publish(@event));
 
