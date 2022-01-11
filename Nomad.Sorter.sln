@@ -29,13 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.Testing", "tests\Noma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{BF688252-2E24-4FB1-A21B-D6F122797907}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepository", "libs\azure-cosmos-dotnet-repository\Microsoft.Azure.CosmosRepository\src\Microsoft.Azure.CosmosRepository.csproj", "{F7897BEC-D438-46D7-8D35-7C40A070B4FC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepositoryTests", "libs\azure-cosmos-dotnet-repository\Microsoft.Azure.CosmosRepository\test\Microsoft.Azure.CosmosRepositoryTests.csproj", "{B2EA502E-A711-4049-9585-A4CE25233FF6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3116A177-E756-4A6A-AA33-546B25991C8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransitMessageGenerator", "tools\MassTransitMessageGenerator\MassTransitMessageGenerator.csproj", "{D7D566D2-FE73-477D-9418-D1190187DFAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepository", "libs\azure-cosmos-dotnet-repository\src\Microsoft.Azure.CosmosRepository\Microsoft.Azure.CosmosRepository.csproj", "{C9D234F1-69E9-4BDB-810D-462402A00DD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepository.AspNetCore", "libs\azure-cosmos-dotnet-repository\src\Microsoft.Azure.CosmosRepository.AspNetCore\Microsoft.Azure.CosmosRepository.AspNetCore.csproj", "{15021F99-7C45-4EDE-817C-925E4AC8DAD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,18 +78,18 @@ Global
 		{8601B39A-F3E9-4DAE-9223-0CB1F3B9BE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8601B39A-F3E9-4DAE-9223-0CB1F3B9BE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8601B39A-F3E9-4DAE-9223-0CB1F3B9BE2D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7897BEC-D438-46D7-8D35-7C40A070B4FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7897BEC-D438-46D7-8D35-7C40A070B4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7897BEC-D438-46D7-8D35-7C40A070B4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7897BEC-D438-46D7-8D35-7C40A070B4FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2EA502E-A711-4049-9585-A4CE25233FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7D566D2-FE73-477D-9418-D1190187DFAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D234F1-69E9-4BDB-810D-462402A00DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D234F1-69E9-4BDB-810D-462402A00DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D234F1-69E9-4BDB-810D-462402A00DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D234F1-69E9-4BDB-810D-462402A00DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8943EFDA-4279-45FC-93D5-9CC1316C723B} = {39415ED4-026E-4D99-8E38-7A98CF291C48}
@@ -102,8 +102,8 @@ Global
 		{37DCAF55-8B6E-454D-BB54-FB5C02B1527F} = {FE3E53E4-5C33-454C-B512-2CE1BB3BF9E3}
 		{B3331819-53CC-4392-8434-39972DB028B2} = {C75C7B1B-94EE-4FDC-B0EB-E4C49F61B025}
 		{8601B39A-F3E9-4DAE-9223-0CB1F3B9BE2D} = {39415ED4-026E-4D99-8E38-7A98CF291C48}
-		{F7897BEC-D438-46D7-8D35-7C40A070B4FC} = {BF688252-2E24-4FB1-A21B-D6F122797907}
-		{B2EA502E-A711-4049-9585-A4CE25233FF6} = {BF688252-2E24-4FB1-A21B-D6F122797907}
 		{D7D566D2-FE73-477D-9418-D1190187DFAB} = {3116A177-E756-4A6A-AA33-546B25991C8F}
+		{C9D234F1-69E9-4BDB-810D-462402A00DD6} = {BF688252-2E24-4FB1-A21B-D6F122797907}
+		{15021F99-7C45-4EDE-817C-925E4AC8DAD7} = {BF688252-2E24-4FB1-A21B-D6F122797907}
 	EndGlobalSection
 EndGlobal

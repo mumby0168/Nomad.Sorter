@@ -1,3 +1,4 @@
+using Microsoft.Azure.CosmosRepository.AspNetCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
@@ -31,8 +32,8 @@ public static class CosmosExtensions
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
         });
 
-        services.AddCosmosRepositoryItemChangeFeedProcessorsFromAssemblyContainingType<ParcelChangeFeedProcessor>();
-        services.AddHostedService<ChangeFeedHostedService>();
+        services.AddCosmosRepositoryChangeFeedHostedService();
+        services.AddCosmosRepositoryItemChangeFeedProcessors(typeof(CosmosExtensions).Assembly);
 
         services.AddSingleton<IParcelRepository, ParcelRepository>();
 
