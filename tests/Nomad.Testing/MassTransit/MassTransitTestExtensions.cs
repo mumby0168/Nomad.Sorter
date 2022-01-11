@@ -15,16 +15,7 @@ public static class MassTransitTestExtensions
     {
         services.RemoveAll(typeof(MassTransitHostedService));
         services.AddSingleton<MassTransitConsumerInvoker>();
-
-        // services.RemoveAll(typeof(IBus));
-        // services.RemoveAll(typeof(IBusControl));
-        // services.RemoveAll(typeof(BusHealthCheck));
-        //
-        // services.AddMassTransitInMemoryTestHarness(cfg =>
-        // {
-        //     cfg.AddConsumer<ParcelPreAdviceCommandConsumer>();
-        //     cfg.AddConsumerTestHarness<ParcelPreAdviceCommandConsumer>();
-        // });
+        services.RemoveAll(typeof(IBus));
 
         return services;
     }
