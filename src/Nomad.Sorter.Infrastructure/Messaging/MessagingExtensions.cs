@@ -1,8 +1,11 @@
 using MassTransit;
 using MassTransit.Azure.ServiceBus.Core;
+using MassTransit.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Nomad.Abstractions.Cqrs;
 using Nomad.Sorter.Application.Commands;
+using Nomad.Sorter.Application.Events.Inbound;
 using Nomad.Sorter.Infrastructure.Messaging.Consumers;
 
 namespace Nomad.Sorter.Infrastructure.Messaging;
@@ -14,11 +17,28 @@ internal static class MessagingExtensions
         services.AddMassTransit(massTransit =>
         {
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();
+            massTransit.AddConsumer<ParcelInductedEventConsumer>();
 
-            massTransit.UsingAzureServiceBus((registration, serviceBusConfig) =>
+            massTransit.UsingAzureServiceBus((registration, cfg) =>
             {
-                serviceBusConfig.Host(configuration.GetConnectionString("ServiceBus"));
-                serviceBusConfig.ConfigureConsumerForQueue<ParcelPreAdviceCommandConsumer>(ServiceBusConstants.Queues.ParcelPreAdviceQueue, registration);
+                cfg.Host(configuration.GetConnectionString("ServiceBus"));
+                
+                //Configures a command to be consumed from a queue with the given name.
+                cfg.ReceiveEndpoint(
+                    queueName: ServiceBusConstants.Queues.ParcelPreAdviceQueue,
+                    e =>
+                    {
+                        e.ConfigureConsumer<ParcelPreAdviceCommandConsumer>(registration);
+                        e.ConfigureConsumeTopology = false;
+                    }
+                );
+
+                //Configures a subscription with the given name on a topic with the given name.
+                cfg.SubscriptionEndpoint(
+                    subscriptionName: ServiceBusConstants.AppName,
+                    topicPath: ServiceBusConstants.Topics.ParcelInductedTopic,
+                    e => e.ConfigureConsumer<ParcelInductedEventConsumer>(registration)
+                );
             });
         });
 
@@ -26,9 +46,4 @@ internal static class MessagingExtensions
 
         return services;
     }
-
-    private static void ConfigureConsumerForQueue<T>(this IServiceBusBusFactoryConfigurator configurator, string queueName,
-        IBusRegistrationContext registrationContext) where T : IConsumer =>
-        configurator.ReceiveEndpoint(queueName,
-            x => x.ConfigureConsumer<ParcelPreAdviceCommandConsumer>(registrationContext));
 }

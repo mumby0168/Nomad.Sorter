@@ -28,4 +28,14 @@ public interface IParcel
     /// The ID of the client this parcel is been distributed for.
     /// </summary>
     ClientId ClientId { get; }
+    
+    /// <summary>
+    /// The <see cref="DateTime"/> the parcel was inducted into the system.
+    /// </summary>
+    DateTime? InductedAtUtc { get; }
+
+    /// <summary>
+    /// Marks a parcel as inducted.
+    /// </summary>
+    void Inducted();
 }

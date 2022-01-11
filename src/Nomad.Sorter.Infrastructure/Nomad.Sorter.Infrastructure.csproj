@@ -3,6 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\azure-cosmos-dotnet-repository\src\Microsoft.Azure.CosmosRepository.AspNetCore\Microsoft.Azure.CosmosRepository.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\libs\azure-cosmos-dotnet-repository\src\Microsoft.Azure.CosmosRepository\Microsoft.Azure.CosmosRepository.csproj" />
     <ProjectReference Include="..\Nomad.Sorter.Application\Nomad.Sorter.Application.csproj" />
   </ItemGroup>
 </Project>
