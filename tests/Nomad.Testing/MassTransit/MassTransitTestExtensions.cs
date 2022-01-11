@@ -13,9 +13,22 @@ public static class MassTransitTestExtensions
 {
     public static IServiceCollection AddMassTransitTestServices(this IServiceCollection services)
     {
-        services.RemoveAll(typeof(MassTransitHostedService));
         services.AddSingleton<MassTransitConsumerInvoker>();
-        services.RemoveAll(typeof(IBus));
+        services.RemoveAll(typeof(MassTransitHostedService));
+       
+        
+        var descriptors = services
+            .Where(d =>
+                d.ServiceType.Namespace is not null &&
+                d.ServiceType.Namespace.StartsWith("MassTransit", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        foreach (var d in descriptors)
+        {
+            services.Remove(d);
+        }
+
+        services.AddMassTransit(c => c.UsingInMemory());
 
         return services;
     }
