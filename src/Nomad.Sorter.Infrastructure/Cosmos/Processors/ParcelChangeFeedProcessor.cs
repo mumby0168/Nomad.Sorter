@@ -25,6 +25,7 @@ public class ParcelChangeFeedProcessor : IItemChangeFeedProcessor<Parcel>
         if (parcel.Status is ParcelStatus.PreAdvice)
         {
             await _lookupRepository.UpdateAsync(parcel.ToParcelLookupByParcelIdItem(), cancellationToken);
+            _logger.LogInformation("Parcel ID lookup created for parcel with {ID}", parcel.ParcelId);
         }
     }
 }

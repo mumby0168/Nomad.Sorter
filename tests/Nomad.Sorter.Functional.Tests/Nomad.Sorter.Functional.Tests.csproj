@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.3.0" />
+    <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
@@ -26,6 +27,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Nomad.Sorter.Web\Nomad.Sorter.Web.csproj" />
     <ProjectReference Include="..\Nomad.Testing\Nomad.Testing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Fixtures\FunctionalTestFixture.cs" />
   </ItemGroup>
 
 </Project>

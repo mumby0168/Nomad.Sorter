@@ -7,11 +7,16 @@ using Nomad.Sorter.Functional.Tests.Abstractions;
 using Nomad.Sorter.Infrastructure.Messaging.Consumers;
 using Nomad.Testing.Extensions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Nomad.Sorter.Functional.Tests.Specs;
 
 public class ParcelPreAdviceSpecTests : NomadSorterFunctionalTest
 {
+    public ParcelPreAdviceSpecTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    {
+    }
+    
     [Fact]
     public async Task Pre_Advice_For_Parcel_Consumed_Correctly()
     {
@@ -58,5 +63,4 @@ public class ParcelPreAdviceSpecTests : NomadSorterFunctionalTest
         var parcel = await ParcelRepository.GetAsync(command.ParcelId, command.DeliveryRegionId);
         parcel.Should().BeValidParcelFor(parcelInductedEvent);
     }
-
 }
