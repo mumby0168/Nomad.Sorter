@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Nomad.Abstractions.Cqrs;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Events.Inbound;
+using Nomad.Sorter.Infrastructure.Extensions;
 using Nomad.Sorter.Infrastructure.Messaging.Consumers;
 
 namespace Nomad.Sorter.Infrastructure.Messaging;
@@ -44,7 +45,7 @@ internal static class MessagingExtensions
             });
         });
 
-        if (hostEnvironment.EnvironmentName is not "FunctionalTests")
+        if (hostEnvironment.IsNotFunctionalTests())
         {
             services.AddMassTransitHostedService();   
         }

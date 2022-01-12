@@ -6,8 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Functional.Tests.Factory;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
-using Nomad.Sorter.Infrastructure.Cosmos.Repositories;
-using Nomad.Testing.ChangeFeed;
 using Nomad.Testing.MassTransit;
 
 namespace Nomad.Sorter.Functional.Tests.Abstractions;

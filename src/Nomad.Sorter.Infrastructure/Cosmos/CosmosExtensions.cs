@@ -1,17 +1,19 @@
 using Microsoft.Azure.CosmosRepository.AspNetCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Infrastructure.Cosmos.Items;
 using Nomad.Sorter.Infrastructure.Cosmos.Processors;
 using Nomad.Sorter.Infrastructure.Cosmos.Repositories;
+using Nomad.Sorter.Infrastructure.Extensions;
 
 namespace Nomad.Sorter.Infrastructure.Cosmos;
 
 public static class CosmosExtensions
 {
-    public static IServiceCollection AddCosmos(this IServiceCollection services)
+    public static IServiceCollection AddCosmos(this IServiceCollection services, IHostEnvironment hostEnvironment)
     {
         services.AddCosmosRepository(x =>
         {
@@ -32,9 +34,12 @@ public static class CosmosExtensions
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive));
         });
 
-        services.AddCosmosRepositoryChangeFeedHostedService();
+        if (hostEnvironment.IsNotFunctionalTests())
+        {
+            services.AddCosmosRepositoryChangeFeedHostedService();   
+        }
+        
         services.AddCosmosRepositoryItemChangeFeedProcessors(typeof(CosmosExtensions).Assembly);
-
         services.AddSingleton<IParcelRepository, ParcelRepository>();
 
         return services;

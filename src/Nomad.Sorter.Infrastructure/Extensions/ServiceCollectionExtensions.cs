@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
         IHostEnvironment hostEnvironment)
     {
         services.AddMessaging(configuration, hostEnvironment);
-        services.AddCosmos();
+        services.AddCosmos(hostEnvironment);
         return services;
     }
 }
