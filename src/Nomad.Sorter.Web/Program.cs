@@ -9,7 +9,7 @@ var services = builder.Services;
 
 services.AddNomadSorterApplication();
 services.AddNomadSorterDomain();
-services.AddNomadSorterInfrastructure(builder.Configuration);
+services.AddNomadSorterInfrastructure(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 

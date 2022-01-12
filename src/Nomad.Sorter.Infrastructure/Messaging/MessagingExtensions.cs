@@ -3,6 +3,7 @@ using MassTransit.Azure.ServiceBus.Core;
 using MassTransit.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Nomad.Abstractions.Cqrs;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Events.Inbound;
@@ -12,7 +13,8 @@ namespace Nomad.Sorter.Infrastructure.Messaging;
 
 internal static class MessagingExtensions
 {
-    internal static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration)
+    internal static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration,
+        IHostEnvironment hostEnvironment)
     {
         services.AddMassTransit(massTransit =>
         {
@@ -42,7 +44,10 @@ internal static class MessagingExtensions
             });
         });
 
-        services.AddMassTransitHostedService();
+        if (hostEnvironment.EnvironmentName is not "FunctionalTests")
+        {
+            services.AddMassTransitHostedService();   
+        }
 
         return services;
     }
