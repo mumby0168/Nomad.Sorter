@@ -33,9 +33,13 @@ public interface IParcel
     /// The <see cref="DateTime"/> the parcel was inducted into the system.
     /// </summary>
     DateTime? InductedAtUtc { get; }
+    
+    BayId? AssociatedBayId { get; }
 
     /// <summary>
     /// Marks a parcel as inducted.
     /// </summary>
     void Inducted();
+
+    void Associate(IBay bay);
 }

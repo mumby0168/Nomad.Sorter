@@ -31,4 +31,19 @@ public interface IBay
     /// </summary>
     /// <remarks>null if there is not vehicle docked in the bay.</remarks>
     DockingInformation? DockingInformation { get; }
+
+    /// <summary>
+    /// Docks a vehicle into a <see cref="IBay"/>
+    /// </summary>
+    /// <param name="vehicleRegistration">The registration of a the vehicle docking.</param>
+    /// <param name="dockedAtUtc">The time the vehicle docked.</param>
+    /// <param name="departingUtc">The time the vehicle is departing.</param>
+    /// <param name="parcelCapacity">The amount of parcels the vehicle can deliver.</param>
+    /// <param name="deliveryRegionId">The delivery region ID the vehicle is delivering to.</param>
+    void DockVehicle(
+        string vehicleRegistration,
+        DateTime dockedAtUtc,
+        DateTime departingUtc,
+        int parcelCapacity,
+        string deliveryRegionId);
 }

@@ -99,6 +99,14 @@ public class ParcelRepository : IParcelRepository
         }
     }
 
+    public IAsyncEnumerable<IParcel> GetParcelsWithDeliveryRegionId(
+        string deliveryRegionId, 
+        int max,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Saves any changes to the <see cref="Parcel"/>
     /// </summary>

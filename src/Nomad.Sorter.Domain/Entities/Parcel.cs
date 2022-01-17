@@ -29,6 +29,8 @@ public class Parcel : BaseEntity, IParcel
     /// <inheritdoc cref="IParcel"/>
     public DateTime? InductedAtUtc { get; private set; }
 
+    public BayId? AssociatedBayId { get; }
+
     /// <summary>
     /// Creates an instance of a parcel.
     /// </summary>
@@ -52,13 +54,15 @@ public class Parcel : BaseEntity, IParcel
     /// <param name="status">The <see cref="ParcelStatus"/> of the parcel.</param>
     /// <param name="deliveryInformation">The <see cref="DeliveryInformation"/> about the parcel</param>
     /// <param name="clientId">The ID of the client</param>
+    /// <param name="associatedBayId">The bay the parcel has been associated with.</param>
     /// <param name="inductedAtUtc">The time the parcel was inducted at.</param>
     [JsonConstructor]
     private Parcel(
         string id,
         ParcelStatus status,
         DeliveryInformation deliveryInformation,
-        ClientId clientId,
+        ClientId clientId, 
+        BayId? associatedBayId, 
         DateTime? inductedAtUtc = null) : base(deliveryInformation.RegionId)
     {
         Id = id;
@@ -66,6 +70,7 @@ public class Parcel : BaseEntity, IParcel
         Status = status;
         DeliveryInformation = deliveryInformation;
         ClientId = clientId;
+        AssociatedBayId = associatedBayId;
         InductedAtUtc = inductedAtUtc;
     }
     
@@ -80,5 +85,10 @@ public class Parcel : BaseEntity, IParcel
         
         Status = ParcelStatus.Inducted;
         InductedAtUtc = DateTime.UtcNow;
+    }
+
+    public void Associate(IBay bay)
+    {
+        throw new NotImplementedException();
     }
 }

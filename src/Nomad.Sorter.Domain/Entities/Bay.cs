@@ -17,10 +17,10 @@ public class Bay : BaseEntity, IBay
 
     /// <inheritdoc cref="IBay"/>
     [JsonConverter(typeof(StringEnumConverter))]
-    public BayStatus Status { get; }
+    public BayStatus Status { get; private set; }
 
     /// <inheritdoc cref="IBay"/>
-    public DockingInformation? DockingInformation { get; }
+    public DockingInformation? DockingInformation { get; private set; }
 
     /// <summary>
     /// Creates an instance of a bay.
@@ -29,9 +29,9 @@ public class Bay : BaseEntity, IBay
     /// <remarks>This object should only be created via a factory in the domain layer.</remarks>
     internal Bay(BayId bayId) : base(nameof(Bay))
     {
+        Id = bayId;
         BayId = bayId;
         Status = BayStatus.Empty;
-        Id = bayId;
         DockingInformation = null;
     }
 
@@ -49,9 +49,26 @@ public class Bay : BaseEntity, IBay
         BayStatus status,
         DockingInformation? dockingInformation = null) : base(nameof(Bay))
     {
+        Id = id;
         Status = status;
         BayId = id.ToBayId();
-        Id = id;
         DockingInformation = dockingInformation;
+    }
+    
+    public void DockVehicle(
+        string vehicleRegistration, 
+        DateTime dockedAtUtc, 
+        DateTime departingUtc, 
+        int parcelCapacity,
+        string deliveryRegionId)
+    {
+        Status = BayStatus.Occupied;
+
+        DockingInformation = new DockingInformation(
+            vehicleRegistration,
+            dockedAtUtc,
+            departingUtc,
+            parcelCapacity,
+            deliveryRegionId);
     }
 }
