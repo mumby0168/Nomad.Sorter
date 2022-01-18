@@ -6,7 +6,7 @@ using Microsoft.Azure.CosmosRepository.ChangeFeed.InMemory;
 using Microsoft.Extensions.DependencyInjection;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Functional.Tests.Factory;
-using Nomad.Sorter.Infrastructure.Cosmos.Items;
+using Nomad.Sorter.Infrastructure.Data.Items;
 using Nomad.Testing.MassTransit;
 using Xunit.Abstractions;
 

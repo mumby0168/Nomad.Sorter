@@ -7,9 +7,9 @@ using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
 using Nomad.Sorter.Domain.Identitifiers;
-using Nomad.Sorter.Infrastructure.Cosmos.Items;
+using Nomad.Sorter.Infrastructure.Data.Items;
 
-namespace Nomad.Sorter.Infrastructure.Cosmos.Repositories;
+namespace Nomad.Sorter.Infrastructure.Data.Repositories;
 
 public class ParcelRepository : IParcelRepository
 {

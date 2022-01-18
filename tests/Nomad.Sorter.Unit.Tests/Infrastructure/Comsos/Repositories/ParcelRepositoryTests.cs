@@ -9,9 +9,9 @@ using Moq.AutoMock;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.ValueObjects;
-using Nomad.Sorter.Infrastructure.Cosmos;
-using Nomad.Sorter.Infrastructure.Cosmos.Items;
-using Nomad.Sorter.Infrastructure.Cosmos.Repositories;
+using Nomad.Sorter.Infrastructure.Data;
+using Nomad.Sorter.Infrastructure.Data.Items;
+using Nomad.Sorter.Infrastructure.Data.Repositories;
 using Nomad.Testing;
 using Xunit;
 

@@ -18,7 +18,7 @@ services.AddMassTransit(massTransit =>
     massTransit.UsingAzureServiceBus((registration, cfg) =>
     {
         cfg.Message<ParcelPreAdviceCommand>(x => { x.SetEntityName(ServiceBusConstants.Queues.ParcelPreAdviceQueue); });
-        cfg.Message<ParcelInductedEvent>(x => x.SetEntityName(ServiceBusConstants.Topics.ParcelInductedTopic));
+            cfg.Message<ParcelInductedEvent>(x => x.SetEntityName(ServiceBusConstants.Topics.ParcelInductedTopic));
         cfg.Host(builder.Configuration.GetConnectionString("ServiceBus"));
     });
 });

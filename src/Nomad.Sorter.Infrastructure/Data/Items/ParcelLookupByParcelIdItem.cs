@@ -1,8 +1,7 @@
 using Microsoft.Azure.CosmosRepository;
 using Newtonsoft.Json;
-using Nomad.Sorter.Domain.Identitifiers;
 
-namespace Nomad.Sorter.Infrastructure.Cosmos.Items;
+namespace Nomad.Sorter.Infrastructure.Data.Items;
 
 public class ParcelLookupByParcelIdItem : FullItem
 {

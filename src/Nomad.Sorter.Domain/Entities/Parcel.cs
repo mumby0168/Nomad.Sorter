@@ -22,14 +22,14 @@ public class Parcel : BaseEntity, IParcel
 
     /// <inheritdoc cref="IParcel"/>
     public DeliveryInformation DeliveryInformation { get; }
-    
+
     /// <inheritdoc cref="IParcel"/>
     public ClientId ClientId { get; }
 
     /// <inheritdoc cref="IParcel"/>
     public DateTime? InductedAtUtc { get; private set; }
 
-    public BayId? AssociatedBayId { get; }
+    public ParcelAssociationInformation? AssociationInformation { get; private set; }
 
     /// <summary>
     /// Creates an instance of a parcel.
@@ -38,7 +38,8 @@ public class Parcel : BaseEntity, IParcel
     /// <param name="deliveryInformation">The<see cref="DeliveryInformation"/> about the parcel</param>
     /// <param name="clientId">The ID of the client</param>
     /// <remarks>This creates a parcel with the <see cref="ParcelStatus"/> PreAdvice</remarks>
-    internal Parcel(ParcelId parcelId, DeliveryInformation deliveryInformation, ClientId clientId) : base(deliveryInformation.RegionId)
+    internal Parcel(ParcelId parcelId, DeliveryInformation deliveryInformation, ClientId clientId) : base(
+        deliveryInformation.RegionId)
     {
         Id = parcelId;
         ParcelId = parcelId;
@@ -56,24 +57,25 @@ public class Parcel : BaseEntity, IParcel
     /// <param name="clientId">The ID of the client</param>
     /// <param name="associatedBayId">The bay the parcel has been associated with.</param>
     /// <param name="inductedAtUtc">The time the parcel was inducted at.</param>
+    /// <param name="associationInformation">The information about which pay and vehicle a parcel has been associated.</param>
     [JsonConstructor]
     private Parcel(
         string id,
         ParcelStatus status,
         DeliveryInformation deliveryInformation,
-        ClientId clientId, 
-        BayId? associatedBayId, 
-        DateTime? inductedAtUtc = null) : base(deliveryInformation.RegionId)
+        ClientId clientId,
+        DateTime? inductedAtUtc = null,
+        ParcelAssociationInformation? associationInformation = null) : base(deliveryInformation.RegionId)
     {
         Id = id;
         ParcelId = id.ToParcelId();
         Status = status;
         DeliveryInformation = deliveryInformation;
         ClientId = clientId;
-        AssociatedBayId = associatedBayId;
+        AssociationInformation = associationInformation;
         InductedAtUtc = inductedAtUtc;
     }
-    
+
     /// <inheritdoc cref="IParcel"/>
     public void Inducted()
     {
@@ -82,13 +84,25 @@ public class Parcel : BaseEntity, IParcel
             throw new DomainException<Parcel>(
                 $"This parcel with ID {ParcelId} was already inducted at {InductedAtUtc}");
         }
-        
+
         Status = ParcelStatus.Inducted;
         InductedAtUtc = DateTime.UtcNow;
     }
 
     public void Associate(IBay bay)
     {
-        throw new NotImplementedException();
+        if (bay.Status is not BayStatus.Occupied || bay.DockingInformation is null)
+        {
+            throw new DomainException<Parcel>(
+                "You cannot associate a parcel to a bay that is not occupied");
+        }
+
+        if (AssociationInformation is not null)
+        {
+            throw new DomainException<Parcel>(
+                $"This parcel is already associated with the bay {AssociationInformation.BayId} and vehicle {AssociationInformation.VehicleRegistration}");
+        }
+
+        AssociationInformation = new(bay.DockingInformation.VehicleRegistration, bay.BayId);
     }
 }

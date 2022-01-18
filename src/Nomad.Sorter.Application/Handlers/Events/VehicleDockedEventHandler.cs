@@ -35,8 +35,6 @@ public class VehicleDockedEventHandler : IEventHandler<VehicleDockedEvent>
             parcelCapacity,
             departingAtUtc,
             dockedAtUtc) = vehicleDockedEvent;
-        
-        //TODO: LOG
 
         var bay = await _bayRepository.GetBay(bayId.ToBayId(), cancellationToken);
         
@@ -48,8 +46,7 @@ public class VehicleDockedEventHandler : IEventHandler<VehicleDockedEvent>
             deliveryRegionId);
 
         await _bayRepository.SaveBay(bay, cancellationToken);
-        
-        //TODO: LOG
+        _logger.LogVehicleDocked(vehicleRegistration, bayId);
         
         var parcelAssociatedEvents = new List<ParcelAssociatedEvent>();
 
@@ -59,7 +56,7 @@ public class VehicleDockedEventHandler : IEventHandler<VehicleDockedEvent>
             parcelAssociatedEvents.Add(new (parcel.ParcelId, vehicleRegistration, bayId));
 
             await _parcelRepository.SaveParcel(parcel, cancellationToken);
-            _logger.LogParcelAssociated(parcel);
+            _logger.LogParcelAssociated(parcel.ParcelId, bayId);
         }
 
         await _dispatcher.DispatchParcelAssociatedEvents(parcelAssociatedEvents);

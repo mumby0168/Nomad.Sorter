@@ -34,7 +34,7 @@ public interface IParcel
     /// </summary>
     DateTime? InductedAtUtc { get; }
     
-    BayId? AssociatedBayId { get; }
+    ParcelAssociationInformation? AssociationInformation { get; }
 
     /// <summary>
     /// Marks a parcel as inducted.

@@ -1,4 +1,4 @@
-namespace Nomad.Sorter.Infrastructure.Cosmos;
+namespace Nomad.Sorter.Infrastructure.Data;
 
 public static class CosmosConstants
 {
@@ -9,5 +9,7 @@ public static class CosmosConstants
     public static class Containers
     {
         public const string Parcels = "parcels";
+        
+        public const string Bays = "bays";
     }
-}
+}   

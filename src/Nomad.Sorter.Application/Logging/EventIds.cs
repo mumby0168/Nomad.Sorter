@@ -8,4 +8,8 @@ public static class EventIds
     public static EventId ParcelAssociated = new(
         8001,
         nameof(ParcelAssociated));
+    
+    public static EventId VehicleDocked = new(
+        8002,
+        nameof(VehicleDocked));
 }

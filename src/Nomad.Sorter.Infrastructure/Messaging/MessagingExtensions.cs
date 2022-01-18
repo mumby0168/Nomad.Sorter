@@ -1,12 +1,9 @@
 using MassTransit;
 using MassTransit.Azure.ServiceBus.Core;
-using MassTransit.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Nomad.Abstractions.Cqrs;
-using Nomad.Sorter.Application.Commands;
-using Nomad.Sorter.Application.Events.Inbound;
+using Nomad.Sorter.Application.Events.Outbound;
 using Nomad.Sorter.Infrastructure.Extensions;
 using Nomad.Sorter.Infrastructure.Messaging.Consumers;
 
@@ -21,27 +18,14 @@ internal static class MessagingExtensions
         {
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();
             massTransit.AddConsumer<ParcelInductedEventConsumer>();
+            massTransit.AddConsumer<VehicleDockerEventConsumer>();
 
             massTransit.UsingAzureServiceBus((registration, cfg) =>
             {
                 cfg.Host(configuration.GetConnectionString("ServiceBus"));
-                
-                //Configures a command to be consumed from a queue with the given name.
-                cfg.ReceiveEndpoint(
-                    queueName: ServiceBusConstants.Queues.ParcelPreAdviceQueue,
-                    e =>
-                    {
-                        e.ConfigureConsumer<ParcelPreAdviceCommandConsumer>(registration);
-                        e.ConfigureConsumeTopology = false;
-                    }
-                );
-
-                //Configures a subscription with the given name on a topic with the given name.
-                cfg.SubscriptionEndpoint(
-                    subscriptionName: ServiceBusConstants.AppName,
-                    topicPath: ServiceBusConstants.Topics.ParcelInductedTopic,
-                    e => e.ConfigureConsumer<ParcelInductedEventConsumer>(registration)
-                );
+                cfg.ConfigureQueues(registration);
+                cfg.ConfigureTopicSubscriptions(registration);
+                cfg.ConfigurePublishers();
             });
         });
 
@@ -51,5 +35,40 @@ internal static class MessagingExtensions
         }
 
         return services;
+    }
+
+    private static void ConfigurePublishers(this IServiceBusBusFactoryConfigurator cfg)
+    {
+        cfg.Message<ParcelAssociatedEvent>(x =>
+            x.SetEntityName(ServiceBusConstants.Topics.ParcelAssociatedTopic));
+    }
+
+
+    private static void ConfigureTopicSubscriptions(
+        this IServiceBusBusFactoryConfigurator cfg,
+        IRegistration registration)
+    {
+        cfg.SubscriptionEndpoint(
+            ServiceBusConstants.AppName,
+            ServiceBusConstants.Topics.ParcelInductedTopic,
+            configurator => configurator.ConfigureConsumer<ParcelInductedEventConsumer>(registration));
+
+        cfg.SubscriptionEndpoint(
+            ServiceBusConstants.AppName,
+            ServiceBusConstants.Topics.VehicleDockedTopic,
+            configurator => configurator.ConfigureConsumer<VehicleDockerEventConsumer>(registration));
+    }
+    
+    private static void ConfigureQueues(
+        this IServiceBusBusFactoryConfigurator cfg, 
+        IRegistration registration)
+    {
+        cfg.ReceiveEndpoint(
+            ServiceBusConstants.Queues.ParcelPreAdviceQueue,
+            configurator =>
+            {
+                configurator.ConfigureConsumer<ParcelPreAdviceCommandConsumer>(registration);
+                configurator.ConfigureConsumeTopology = false;
+            });
     }
 }

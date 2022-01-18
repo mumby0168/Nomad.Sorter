@@ -6,8 +6,8 @@ using Moq;
 using Moq.AutoMock;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.ValueObjects;
-using Nomad.Sorter.Infrastructure.Cosmos.Items;
-using Nomad.Sorter.Infrastructure.Cosmos.Processors;
+using Nomad.Sorter.Infrastructure.Data.Items;
+using Nomad.Sorter.Infrastructure.Data.Processors;
 using Nomad.Testing;
 using Xunit;
 

@@ -3,9 +3,9 @@ using Microsoft.Azure.CosmosRepository.ChangeFeed;
 using Microsoft.Extensions.Logging;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Enums;
-using Nomad.Sorter.Infrastructure.Cosmos.Items;
+using Nomad.Sorter.Infrastructure.Data.Items;
 
-namespace Nomad.Sorter.Infrastructure.Cosmos.Processors;
+namespace Nomad.Sorter.Infrastructure.Data.Processors;
 
 public class ParcelChangeFeedProcessor : IItemChangeFeedProcessor<Parcel>
 {
