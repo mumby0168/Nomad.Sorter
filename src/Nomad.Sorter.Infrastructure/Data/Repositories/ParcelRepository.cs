@@ -1,4 +1,6 @@
+using System.Linq.Expressions;
 using System.Net;
+using System.Runtime.CompilerServices;
 using CleanArchitecture.Exceptions;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.CosmosRepository;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities;
 using Nomad.Sorter.Domain.Entities.Abstractions;
+using Nomad.Sorter.Domain.Enums;
 using Nomad.Sorter.Domain.Identitifiers;
 using Nomad.Sorter.Infrastructure.Data.Items;
 
@@ -61,13 +64,15 @@ public class ParcelRepository : IParcelRepository
 
         try
         {
-            var parcelReference = await _parcelIdLookupCosmosRepository.GetAsync(parcelId.ToString(), cancellationToken: cancellationToken);
+            var parcelReference =
+                await _parcelIdLookupCosmosRepository.GetAsync(parcelId.ToString(),
+                    cancellationToken: cancellationToken);
             deliveryRegionId = parcelReference.DeliveryRegionId;
         }
         catch (CosmosException e) when (e.StatusCode is HttpStatusCode.NotFound)
         {
             _logger.LogError(e, "Failed to find parcel lookup with ID {ParcelId}", parcelId);
-            
+
             throw new ResourceNotFoundException<Parcel>($"A parcel with the ID {parcelId} was not found");
         }
 
@@ -82,7 +87,8 @@ public class ParcelRepository : IParcelRepository
     /// <param name="cancellationToken">The cancellation token to cancel the read operation.</param>
     /// <returns>An <see cref="IParcel"/></returns>
     /// <exception cref="ResourceNotFoundException{Parcel}">Occurs when a parcel with the given <see cref="ParcelId"/> in the given delivery region ID does not exist.</exception>
-    public async ValueTask<IParcel> GetParcel(ParcelId parcelId, string deliveryRegionId, CancellationToken cancellationToken = default)
+    public async ValueTask<IParcel> GetParcel(ParcelId parcelId, string deliveryRegionId,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -91,20 +97,45 @@ public class ParcelRepository : IParcelRepository
         catch (CosmosException e) when (e.StatusCode is HttpStatusCode.NotFound)
         {
             _logger.LogError(e,
-                "Failed to find parcel with ID {ParcelId} and the delivery region ID {DeliveryRegionId}", 
+                "Failed to find parcel with ID {ParcelId} and the delivery region ID {DeliveryRegionId}",
                 parcelId, deliveryRegionId);
-            
+
             throw new ResourceNotFoundException<Parcel>(
                 $"A parcel with the ID {parcelId} and the delivery region ID {deliveryRegionId} was not found");
         }
     }
 
-    public IAsyncEnumerable<IParcel> GetParcelsWithDeliveryRegionId(
-        string deliveryRegionId, 
+    public async IAsyncEnumerable<IParcel> GetParcelsWithDeliveryRegionId(
+        string deliveryRegionId,
         int max,
-        CancellationToken cancellationToken = default)
+        int chunkSize = 25,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        int collected = 0;
+        bool hasMoreResults = true;
+        string? token = null;
+
+        Expression<Func<Parcel, bool>> expression = parcel =>
+            parcel.PartitionKey == deliveryRegionId &&
+            parcel.Status == ParcelStatus.Inducted;
+
+        while (hasMoreResults is false || collected >= max)
+        {
+            var page = await _parcelCosmosRepository.PageAsync(expression, chunkSize, token, cancellationToken);
+
+            token = page.Continuation;
+            hasMoreResults = page.Continuation is not null;
+
+            foreach (var item in page.Items)
+            {
+                if (collected < max)
+                {
+                    yield return item;   
+                }
+                
+                collected++;
+            }
+        }
     }
 
     /// <summary>

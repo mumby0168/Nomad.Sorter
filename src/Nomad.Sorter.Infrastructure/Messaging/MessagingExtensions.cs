@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nomad.Sorter.Application.Events.Outbound;
+using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Infrastructure.Extensions;
 using Nomad.Sorter.Infrastructure.Messaging.Consumers;
+using Nomad.Sorter.Infrastructure.Messaging.Services;
 
 namespace Nomad.Sorter.Infrastructure.Messaging;
 
@@ -14,6 +16,7 @@ internal static class MessagingExtensions
     internal static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration,
         IHostEnvironment hostEnvironment)
     {
+        services.AddScoped<IDispatcher, MassTransitDispatcher>();
         services.AddMassTransit(massTransit =>
         {
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();

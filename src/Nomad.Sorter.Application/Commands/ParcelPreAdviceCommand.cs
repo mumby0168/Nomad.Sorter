@@ -1,4 +1,4 @@
-using Nomad.Abstractions.Cqrs;
+using Convey.CQRS.Commands;
 
 namespace Nomad.Sorter.Application.Commands;
 

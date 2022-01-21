@@ -1,3 +1,4 @@
+using Convey.CQRS.Events;
 using MassTransit;
 using MassTransit.Mediator;
 using Microsoft.Extensions.Logging;
@@ -8,12 +9,12 @@ namespace Nomad.Sorter.Infrastructure.Messaging.Consumers;
 public class VehicleDockerEventConsumer : IConsumer<VehicleDockedEvent>
 {
     private readonly ILogger<VehicleDockerEventConsumer> _logger;
-    private readonly IMediator _mediator;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public VehicleDockerEventConsumer(ILogger<VehicleDockerEventConsumer> logger, IMediator mediator)
+    public VehicleDockerEventConsumer(ILogger<VehicleDockerEventConsumer> logger, IEventDispatcher eventDispatcher)
     {
         _logger = logger;
-        _mediator = mediator;
+        _eventDispatcher = eventDispatcher;
     }
 
     public async Task Consume(ConsumeContext<VehicleDockedEvent> context)
@@ -24,7 +25,7 @@ public class VehicleDockerEventConsumer : IConsumer<VehicleDockedEvent>
                 "Processing vehicle docked event for vehicle {VehicleRegistration}",
                 context.Message.VehicleRegistration);
 
-            await _mediator.Publish(context.Message, context.CancellationToken);
+            await _eventDispatcher.PublishAsync(context.Message, context.CancellationToken);
 
             _logger.LogDebug(
                 "Processing vehicle docked event for vehicle {VehicleRegistration}",

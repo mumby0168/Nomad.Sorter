@@ -1,3 +1,4 @@
+using Convey.CQRS.Events;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,12 +9,12 @@ namespace Nomad.Sorter.Infrastructure.Messaging.Consumers;
 public class ParcelInductedEventConsumer : IConsumer<ParcelInductedEvent>
 {
     private readonly ILogger<ParcelInductedEventConsumer> _logger;
-    private readonly IMediator _mediator;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public ParcelInductedEventConsumer(ILogger<ParcelInductedEventConsumer> logger, IMediator mediator)
+    public ParcelInductedEventConsumer(ILogger<ParcelInductedEventConsumer> logger, IEventDispatcher eventDispatcher)
     {
         _logger = logger;
-        _mediator = mediator;
+        _eventDispatcher = eventDispatcher;
     }
 
     public async Task Consume(ConsumeContext<ParcelInductedEvent> context)
@@ -24,7 +25,7 @@ public class ParcelInductedEventConsumer : IConsumer<ParcelInductedEvent>
                 "Processing parcel inducted event for parcel with ID {ParcelId}",
                 context.Message.ParcelId);
 
-            await _mediator.Publish(context.Message, context.CancellationToken);
+            await _eventDispatcher.PublishAsync(context.Message, context.CancellationToken);
 
             _logger.LogInformation(
                 "Successfully processed parcel inducted event for parcel with ID {ParcelId}",

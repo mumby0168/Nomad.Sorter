@@ -1,4 +1,5 @@
-using Nomad.Abstractions.Cqrs;
+
+using Convey.CQRS.Events;
 using Nomad.Sorter.Application.Events.Inbound;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Entities.Abstractions;
@@ -13,7 +14,7 @@ public class ParcelInductedEventHandler : IEventHandler<ParcelInductedEvent>
     public ParcelInductedEventHandler(IParcelRepository parcelRepository) => 
         _parcelRepository = parcelRepository;
 
-    public async Task Handle(ParcelInductedEvent parcelInductedEvent, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(ParcelInductedEvent parcelInductedEvent, CancellationToken cancellationToken = default)
     {
         var parcel = await _parcelRepository.GetParcel(parcelInductedEvent.ParcelId.ToParcelId(), cancellationToken);
 

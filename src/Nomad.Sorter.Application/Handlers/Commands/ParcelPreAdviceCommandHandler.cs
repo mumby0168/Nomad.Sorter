@@ -1,4 +1,4 @@
-using Nomad.Abstractions.Cqrs;
+using Convey.CQRS.Commands;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Domain.Factories;
@@ -16,7 +16,7 @@ public class ParcelPreAdviceCommandHandler : ICommandHandler<ParcelPreAdviceComm
         _parcelRepository = parcelRepository;
     }
     
-    public async Task Handle(ParcelPreAdviceCommand command, CancellationToken cancellationToken)
+    public async Task HandleAsync(ParcelPreAdviceCommand command, CancellationToken cancellationToken)
     {
         var (parcelId, clientId, deliveryRegionId, deliveryPostCode) = command;
 

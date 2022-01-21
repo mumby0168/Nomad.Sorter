@@ -21,6 +21,7 @@ public interface IParcelRepository
     IAsyncEnumerable<IParcel> GetParcelsWithDeliveryRegionId(
         string deliveryRegionId, 
         int max, 
+        int chunkSze = 25,
         CancellationToken cancellationToken = default);
 
     ValueTask SaveParcel(

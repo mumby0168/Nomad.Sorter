@@ -47,7 +47,7 @@ public class ParcelPreAdviceCommandHandlerTests
         
 
         //Act
-        await sut.Handle(command, default);
+        await sut.HandleAsync(command, default);
 
         //Assert
         _parcelRepository.Verify(o => o.CreateParcel(parcel.Object, default), Times.Once);

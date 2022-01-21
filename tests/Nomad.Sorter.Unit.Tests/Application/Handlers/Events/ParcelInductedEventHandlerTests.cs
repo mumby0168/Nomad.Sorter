@@ -38,7 +38,7 @@ public class ParcelInductedEventHandlerTests
             .ReturnsAsync(parcel.Object);
 
         //Act
-        await sut.Handle(inductedEvent, default);
+        await sut.HandleAsync(inductedEvent);
 
         //Assert
         _parcelRepository.Verify(o => o.SaveParcel(parcel.Object, default));

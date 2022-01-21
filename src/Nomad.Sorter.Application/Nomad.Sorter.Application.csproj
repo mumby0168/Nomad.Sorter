@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Convey.CQRS.Commands" Version="1.0.531" />
+    <PackageReference Include="Convey.CQRS.Events" Version="1.0.531" />
   </ItemGroup>
 
   <ItemGroup>

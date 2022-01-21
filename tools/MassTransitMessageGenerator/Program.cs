@@ -1,4 +1,7 @@
 using MassTransit;
+using MassTransitMessageGenerator.Models;
+using MassTransitMessageGenerator.Services;
+using MassTransitMessageGenerator.Workers;
 using Microsoft.AspNetCore.Mvc;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Events.Inbound;
@@ -10,6 +13,9 @@ var services = builder.Services;
 
 services.AddSwaggerGen();
 services.AddEndpointsApiExplorer();
+services.AddHostedService<MessagingWorker>();
+services.AddSingleton<IMessageQueuingService, MessageQueuingService>();
+services.AddSingleton<ISimulationService, SimulationService>();
 
 
 EndpointConvention.Map<ParcelPreAdviceCommand>(new Uri($"queue:{ServiceBusConstants.Queues.ParcelPreAdviceQueue}"));
@@ -48,5 +54,17 @@ app.MapPost("api/commands/parcel-pre-advice/test", async (ISendEndpointProvider 
 
 app.MapPost("api/events/parcel-inducted",
     (ParcelInductedEvent @event, IPublishEndpoint publishEndpoint) => publishEndpoint.Publish(@event));
+
+app.MapGet("/newSimulation", ([FromServices] ISimulationService simulationService, [FromQuery] int parcels, [FromQuery] int vehicleSize) =>
+{
+    if (simulationService.IsSimulationInProgress)
+    {
+        return Results.Ok($"Simulation {simulationService.SimulationId} already in progress");
+    }
+
+    simulationService.TryStart(new StartSimulationRequest(parcels, vehicleSize));
+
+    return Results.Ok($"Simulation started {simulationService.SimulationId}");
+});
 
 app.Run();

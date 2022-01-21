@@ -1,3 +1,6 @@
+using Convey;
+using Convey.CQRS.Commands;
+using Convey.CQRS.Events;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,7 +10,11 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddNomadSorterApplication(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(ServiceCollectionExtensions));
+        services.AddConvey()
+            .AddInMemoryCommandDispatcher()
+            .AddInMemoryEventDispatcher()
+            .AddEventHandlers()
+            .AddCommandHandlers();
         return services;
     }
 }
