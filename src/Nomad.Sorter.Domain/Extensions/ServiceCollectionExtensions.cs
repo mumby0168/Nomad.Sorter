@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddNomadSorterDomain(this IServiceCollection services)
     {
         services.AddSingleton<IParcelFactory, ParcelFactory>();
+        services.AddSingleton<IBayFactory, BayFactory>();
         return services;
     }
 }
