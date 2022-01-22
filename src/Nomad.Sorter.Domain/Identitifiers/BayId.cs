@@ -30,9 +30,9 @@ public record BayId
         Value = value;
     }
 
-    public string Value { get; init; }
+    public string Value { get; }
 
-    public static implicit operator string(BayId parcelId) => parcelId.Value;
+    public static implicit operator string(BayId bayId) => bayId.Value;
 
     public override string ToString() => Value;
 };

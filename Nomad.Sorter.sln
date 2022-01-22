@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{BF688252-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3116A177-E756-4A6A-AA33-546B25991C8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransitMessageGenerator", "tools\MassTransitMessageGenerator\MassTransitMessageGenerator.csproj", "{D7D566D2-FE73-477D-9418-D1190187DFAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.Simulator", "tools\Nomad.Simulator\Nomad.Simulator.csproj", "{D7D566D2-FE73-477D-9418-D1190187DFAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.CosmosRepository", "libs\azure-cosmos-dotnet-repository\src\Microsoft.Azure.CosmosRepository\Microsoft.Azure.CosmosRepository.csproj", "{C9D234F1-69E9-4BDB-810D-462402A00DD6}"
 EndProject

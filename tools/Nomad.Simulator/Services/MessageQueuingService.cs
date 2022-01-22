@@ -1,4 +1,4 @@
-namespace MassTransitMessageGenerator.Services;
+namespace Nomad.Simulator.Services;
 
 public class MessageQueuingService : IMessageQueuingService
 {

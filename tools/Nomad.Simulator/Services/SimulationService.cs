@@ -1,10 +1,9 @@
 using System.Collections.Concurrent;
-using MassTransitMessageGenerator.Models;
-using Microsoft.AspNetCore.Identity;
+using Nomad.Simulator.Models;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Events.Inbound;
 
-namespace MassTransitMessageGenerator.Services;
+namespace Nomad.Simulator.Services;
 
 public class SimulationService : ISimulationService
 {
@@ -24,7 +23,7 @@ public class SimulationService : ISimulationService
 
     public Guid SimulationId { get; private set; } = Guid.NewGuid();
 
-    public bool TryStart(StartSimulationRequest startSimulationRequest)
+    public bool TryStart(StartSimulationCommand startSimulationCommand)
     {
         if (IsSimulationInProgress)
         {
@@ -34,14 +33,14 @@ public class SimulationService : ISimulationService
         _deliveryRegionId = Guid.NewGuid();
         SimulationId = Guid.NewGuid();
         IsSimulationInProgress = true;
-        Parcels = new ConcurrentBag<SimulatedParcel>();
+        Parcels = new ConcurrentBag<SimulatedDto>();
 
         _logger.LogInformation("Starting new simulation {SimulationId} working with delivery region {DeliveryRegionId}",
             SimulationId, _deliveryRegionId);
 
-        for (int i = 0; i < startSimulationRequest.ParcelsSimulation; i++)
+        for (int i = 0; i < startSimulationCommand.ParcelsInSimulation; i++)
         {
-            var simulationParcel = new SimulatedParcel
+            var simulationParcel = new SimulatedDto
             {
                 Id = Guid.NewGuid().ToString("N"),
                 DeliveryRegionId = _deliveryRegionId.ToString(),
@@ -64,11 +63,31 @@ public class SimulationService : ISimulationService
         return true;
     }
 
+    public bool DockVehicle(SimulateVehicleDockingCommand dockingCommand)
+    {
+        if (!IsSimulationInProgress)
+        {
+            return false;
+        }
+
+        var dockedEvent = new VehicleDockedEvent(
+            dockingCommand.Registration,
+            dockingCommand.DeliveryRegionId,
+            dockingCommand.BayId,
+            dockingCommand.Capacity,
+            DateTime.UtcNow.AddMinutes(10),
+            DateTime.UtcNow);
+
+        _messageQueuingService.Operations.Enqueue(dockedEvent);
+
+        return true;
+    }
+
     public void Cancel()
     {
         throw new NotImplementedException();
     }
 
-    public ConcurrentBag<SimulatedParcel> Parcels { get; set; }
+    public ConcurrentBag<SimulatedDto> Parcels { get; set; }
     public string DeliveryRegionId { get; private set; }
 }

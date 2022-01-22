@@ -1,10 +1,9 @@
-using Convey.CQRS.Commands;
 using MassTransit;
-using MassTransitMessageGenerator.Services;
+using Nomad.Simulator.Services;
 using Nomad.Sorter.Application.Commands;
 using Nomad.Sorter.Application.Events.Inbound;
 
-namespace MassTransitMessageGenerator.Workers;
+namespace Nomad.Simulator.Workers;
 
 public class MessagingWorker : BackgroundService
 {
@@ -29,22 +28,29 @@ public class MessagingWorker : BackgroundService
             while (_messageQueuingService.Operations.TryDequeue(out var operation))
             {
                 _logger.LogInformation("Operation de-queued");
-                if (operation is ParcelPreAdviceCommand preAdviceCommand)
+                switch (operation)
                 {
-                    _logger.LogInformation("parcel pre-advice for parcel {ParcelId}",
-                        preAdviceCommand.ParcelId);
+                    case ParcelPreAdviceCommand preAdviceCommand:
+                        _logger.LogInformation("parcel pre-advice for parcel {ParcelId}",
+                            preAdviceCommand.ParcelId);
 
-                    await Send(preAdviceCommand);
-                }
-                else if (operation is ParcelInductedEvent inductedEvent)
-                {
-                    _logger.LogInformation("parcel inducted event for parcel {ParcelId}",
-                        inductedEvent.ParcelId);
+                        await Send(preAdviceCommand);
+                        break;
+                    case ParcelInductedEvent inductedEvent:
+                        _logger.LogInformation("parcel inducted event for parcel {ParcelId}",
+                            inductedEvent.ParcelId);
                     
-                    await Publish(inductedEvent);
+                        await Publish(inductedEvent);
+                        break;
+                    case VehicleDockedEvent dockedEvent:
+                        _logger.LogInformation("vehicle docking event with capacity {Capacity}",
+                            dockedEvent.ParcelCapacity);
+                    
+                        await Publish(dockedEvent);
+                        break;
                 }
             }
-
+            
             await Task.Delay(500, stoppingToken);
         }
     }
