@@ -58,7 +58,10 @@ public static class CosmosExtensions
                 .WithContainer(CosmosConstants.Containers.Parcels)
                 .WithPartitionKey(CosmosConstants.DefaultPartitionKey)
                 .WithContainerDefaultTimeToLive(parcelsContainerTimeToLive)
-                .WithChangeFeedMonitoring());
+                .WithChangeFeedMonitoring(options =>
+                {
+                    options.PollInterval = TimeSpan.FromSeconds(2);
+                }));
 
         containerBuilder.Configure<ParcelLookupByParcelIdItem>(parcelContainerOptions =>
             parcelContainerOptions

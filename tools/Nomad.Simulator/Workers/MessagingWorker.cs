@@ -7,16 +7,16 @@ namespace Nomad.Simulator.Workers;
 
 public class MessagingWorker : BackgroundService
 {
-    private readonly IMessageQueuingService _messageQueuingService;
+    private readonly Queue<object> _queue;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<MessagingWorker> _logger;
 
     public MessagingWorker(
-        IMessageQueuingService messageQueuingService,
+        Queue<object> queue,
         IServiceProvider serviceProvider,
         ILogger<MessagingWorker> logger)
     {
-        _messageQueuingService = messageQueuingService;
+        _queue = queue;
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
@@ -25,7 +25,7 @@ public class MessagingWorker : BackgroundService
     {
         while (stoppingToken.IsCancellationRequested is false)
         {
-            while (_messageQueuingService.Operations.TryDequeue(out var operation))
+            while (_queue.TryDequeue(out var operation))
             {
                 _logger.LogInformation("Operation de-queued");
                 switch (operation)

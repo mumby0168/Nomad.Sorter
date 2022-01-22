@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BF3A
 		scripts\docker-compose.yml = scripts\docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cosmology", "tools\Cosmology\Cosmology.csproj", "{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15021F99-7C45-4EDE-817C-925E4AC8DAD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8943EFDA-4279-45FC-93D5-9CC1316C723B} = {39415ED4-026E-4D99-8E38-7A98CF291C48}
@@ -100,5 +106,6 @@ Global
 		{D7D566D2-FE73-477D-9418-D1190187DFAB} = {3116A177-E756-4A6A-AA33-546B25991C8F}
 		{C9D234F1-69E9-4BDB-810D-462402A00DD6} = {BF688252-2E24-4FB1-A21B-D6F122797907}
 		{15021F99-7C45-4EDE-817C-925E4AC8DAD7} = {BF688252-2E24-4FB1-A21B-D6F122797907}
+		{A1CF3268-9E8E-4E8A-A57A-DCEE4AF53021} = {3116A177-E756-4A6A-AA33-546B25991C8F}
 	EndGlobalSection
 EndGlobal

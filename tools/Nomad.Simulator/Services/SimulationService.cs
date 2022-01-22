@@ -7,19 +7,20 @@ namespace Nomad.Simulator.Services;
 
 public class SimulationService : ISimulationService
 {
-    private readonly IMessageQueuingService _messageQueuingService;
+    private readonly Queue<object> _queue;
     private readonly ILogger<SimulationService> _logger;
-    private Guid _deliveryRegionId = Guid.NewGuid();
 
     public SimulationService(
-        IMessageQueuingService messageQueuingService,
+        Queue<object> queue,
         ILogger<SimulationService> logger)
     {
-        _messageQueuingService = messageQueuingService;
+        _queue = queue;
         _logger = logger;
+        DeliveryRegionId = Guid.NewGuid().ToString();
+        Parcels = new ConcurrentBag<SimulatedDto>();
     }
 
-    public bool IsSimulationInProgress { get; private set; } = false;
+    public bool IsSimulationInProgress { get; private set; }
 
     public Guid SimulationId { get; private set; } = Guid.NewGuid();
 
@@ -30,33 +31,36 @@ public class SimulationService : ISimulationService
             return false;
         }
 
-        _deliveryRegionId = Guid.NewGuid();
+        DeliveryRegionId = Guid.NewGuid().ToString();
         SimulationId = Guid.NewGuid();
         IsSimulationInProgress = true;
-        Parcels = new ConcurrentBag<SimulatedDto>();
+        Parcels.Clear();
 
         _logger.LogInformation("Starting new simulation {SimulationId} working with delivery region {DeliveryRegionId}",
-            SimulationId, _deliveryRegionId);
+            SimulationId, DeliveryRegionId);
 
         for (int i = 0; i < startSimulationCommand.ParcelsInSimulation; i++)
         {
             var simulationParcel = new SimulatedDto
             {
                 Id = Guid.NewGuid().ToString("N"),
-                DeliveryRegionId = _deliveryRegionId.ToString(),
+                DeliveryRegionId = DeliveryRegionId,
             };
             Parcels.Add(simulationParcel);
-            _messageQueuingService.Operations.Enqueue(new ParcelPreAdviceCommand(simulationParcel.Id,
+            _queue.Enqueue(new ParcelPreAdviceCommand(simulationParcel.Id,
                 "CLIENT123", simulationParcel.DeliveryRegionId, "SOME_POST_CODE"));
         }
 
 
-        Task.Run(() =>
+        Task.Run(async () =>
         {
-            Task.Delay(3000);
+            await Task.Delay(startSimulationCommand.InductDelayInSeconds * 1000);
+            
+            _logger.LogInformation("Starting parcel's induction");
+            
             foreach (var simulatedParcel in Parcels)
             {
-                _messageQueuingService.Operations.Enqueue(new ParcelInductedEvent(simulatedParcel.Id));
+                _queue.Enqueue(new ParcelInductedEvent(simulatedParcel.Id));
             }
         });
 
@@ -78,16 +82,19 @@ public class SimulationService : ISimulationService
             DateTime.UtcNow.AddMinutes(10),
             DateTime.UtcNow);
 
-        _messageQueuingService.Operations.Enqueue(dockedEvent);
+        _queue.Enqueue(dockedEvent);
 
         return true;
     }
 
     public void Cancel()
     {
-        throw new NotImplementedException();
+        _queue.Clear();
+        IsSimulationInProgress = false;
+        Parcels.Clear();
     }
 
-    public ConcurrentBag<SimulatedDto> Parcels { get; set; }
+    public ConcurrentBag<SimulatedDto> Parcels { get; }
+    
     public string DeliveryRegionId { get; private set; }
 }

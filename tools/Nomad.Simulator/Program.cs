@@ -1,6 +1,5 @@
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow;
+using Microsoft.Azure.Cosmos;
 using Nomad.Simulator.Models;
 using Nomad.Simulator.Services;
 using Nomad.Simulator.Workers;
@@ -15,14 +14,15 @@ var services = builder.Services;
 services.AddSwaggerGen();
 services.AddEndpointsApiExplorer();
 services.AddHostedService<MessagingWorker>();
-services.AddSingleton<IMessageQueuingService, MessageQueuingService>();
+services.AddSingleton(new Queue<object>());
 services.AddSingleton<ISimulationService, SimulationService>();
+services.AddSingleton(new CosmosClient(builder.Configuration.GetConnectionString("CosmosConnectionString")));
 
 
 EndpointConvention.Map<ParcelPreAdviceCommand>(new Uri($"queue:{ServiceBusConstants.Queues.ParcelPreAdviceQueue}"));
 services.AddMassTransit(massTransit =>
 {
-    massTransit.UsingAzureServiceBus((registration, cfg) =>
+    massTransit.UsingAzureServiceBus((_, cfg) =>
     {
         cfg.Message<ParcelPreAdviceCommand>(x =>
             x.SetEntityName(ServiceBusConstants.Queues.ParcelPreAdviceQueue));
@@ -45,6 +45,11 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
+app.MapPost("simulation/reset", (ISimulationService simulationService) =>
+{
+    simulationService.Cancel();
+});
+
 app.MapPost("/simulation/new", (StartSimulationCommand command, ISimulationService simulationService) =>
 {
     if (simulationService.IsSimulationInProgress)
@@ -59,7 +64,7 @@ app.MapPost("/simulation/new", (StartSimulationCommand command, ISimulationServi
 
 app.MapPost("/simulation/dock", (SimulateVehicleDockingCommand command, ISimulationService simulationService) =>
 {
-    if (simulationService.DockVehicle(command)) ;
+    if (simulationService.DockVehicle(command))
     {
         return Results.Ok("Vehicle Docked");
     }
