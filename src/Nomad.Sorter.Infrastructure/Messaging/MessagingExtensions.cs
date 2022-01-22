@@ -1,8 +1,10 @@
+using System.Configuration;
 using MassTransit;
 using MassTransit.Azure.ServiceBus.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Nomad.Sorter.Application.Events.Inbound;
 using Nomad.Sorter.Application.Events.Outbound;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Infrastructure.Extensions;
@@ -22,6 +24,7 @@ internal static class MessagingExtensions
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();
             massTransit.AddConsumer<ParcelInductedEventConsumer>();
             massTransit.AddConsumer<VehicleDockerEventConsumer>();
+            
 
             massTransit.UsingAzureServiceBus((registration, cfg) =>
             {
@@ -54,12 +57,22 @@ internal static class MessagingExtensions
         cfg.SubscriptionEndpoint(
             ServiceBusConstants.AppName,
             ServiceBusConstants.Topics.ParcelInductedTopic,
-            configurator => configurator.ConfigureConsumer<ParcelInductedEventConsumer>(registration));
+            configurator =>
+            {
+                configurator.PublishFaults = false;
+                configurator.ConfigureConsumeTopology = false;
+                configurator.ConfigureConsumer<ParcelInductedEventConsumer>(registration);
+            });
 
         cfg.SubscriptionEndpoint(
             ServiceBusConstants.AppName,
             ServiceBusConstants.Topics.VehicleDockedTopic,
-            configurator => configurator.ConfigureConsumer<VehicleDockerEventConsumer>(registration));
+            configurator =>
+            {
+                configurator.PublishFaults = false;
+                configurator.ConfigureConsumeTopology = false;
+                configurator.ConfigureConsumer<VehicleDockerEventConsumer>(registration);
+            });
     }
     
     private static void ConfigureQueues(
@@ -72,6 +85,7 @@ internal static class MessagingExtensions
             {
                 configurator.ConfigureConsumer<ParcelPreAdviceCommandConsumer>(registration);
                 configurator.ConfigureConsumeTopology = false;
+                configurator.PublishFaults = false;
             });
     }
 }

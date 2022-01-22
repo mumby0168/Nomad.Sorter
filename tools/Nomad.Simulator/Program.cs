@@ -16,7 +16,6 @@ services.AddEndpointsApiExplorer();
 services.AddHostedService<MessagingWorker>();
 services.AddSingleton(new Queue<object>());
 services.AddSingleton<ISimulationService, SimulationService>();
-services.AddSingleton(new CosmosClient(builder.Configuration.GetConnectionString("CosmosConnectionString")));
 
 
 EndpointConvention.Map<ParcelPreAdviceCommand>(new Uri($"queue:{ServiceBusConstants.Queues.ParcelPreAdviceQueue}"));
@@ -27,7 +26,7 @@ services.AddMassTransit(massTransit =>
         cfg.Message<ParcelPreAdviceCommand>(x =>
             x.SetEntityName(ServiceBusConstants.Queues.ParcelPreAdviceQueue));
         
-        cfg.Message<ParcelInductedEvent>(x =>
+        cfg.Message<ParcelInductedEvent>(x => 
             x.SetEntityName(ServiceBusConstants.Topics.ParcelInductedTopic));
         
         cfg.Message<VehicleDockedEvent>(x =>

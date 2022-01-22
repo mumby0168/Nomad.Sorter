@@ -1,7 +1,6 @@
 using Convey;
 using Convey.CQRS.Commands;
 using Convey.CQRS.Events;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Nomad.Sorter.Application.Extensions;

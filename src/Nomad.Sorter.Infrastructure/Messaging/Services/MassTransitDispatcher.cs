@@ -25,7 +25,7 @@ public class MassTransitDispatcher : IDispatcher
         _logger.LogInformation("Dispatching {ParcelAssociatedEventsCount} parcel associated event", 
             associatedEvents.Count);
 
-        await _publishEndpoint.Publish(associatedEvents);
+        await _publishEndpoint.PublishBatch(associatedEvents);
         
         _logger.LogInformation("Successfully dispatched {ParcelAssociatedEventsCount} parcel associated event", 
             associatedEvents.Count);

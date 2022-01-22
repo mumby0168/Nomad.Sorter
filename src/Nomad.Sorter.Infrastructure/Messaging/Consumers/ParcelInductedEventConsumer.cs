@@ -1,6 +1,5 @@
 using Convey.CQRS.Events;
 using MassTransit;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Nomad.Sorter.Application.Events.Inbound;
 
@@ -29,7 +28,7 @@ public class ParcelInductedEventConsumer : IConsumer<ParcelInductedEvent>
 
             _logger.LogInformation(
                 "Successfully processed parcel inducted event for parcel with ID {ParcelId}",
-                context.Message.ParcelId);
+                context.Message.ParcelId);      
         }
         catch (Exception e)
         {

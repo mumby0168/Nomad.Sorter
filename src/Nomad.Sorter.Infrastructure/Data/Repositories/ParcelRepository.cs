@@ -119,7 +119,7 @@ public class ParcelRepository : IParcelRepository
             parcel.PartitionKey == deliveryRegionId &&
             parcel.Status == ParcelStatus.Inducted;
 
-        while (hasMoreResults || collected < max)
+        while (hasMoreResults && collected < max)
         {
             var page = await _parcelCosmosRepository.PageAsync(expression, chunkSize, token, cancellationToken);
 

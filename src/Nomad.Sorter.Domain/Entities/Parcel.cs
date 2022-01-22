@@ -103,6 +103,7 @@ public class Parcel : BaseEntity, IParcel
                 $"This parcel is already associated with the bay {AssociationInformation.BayId} and vehicle {AssociationInformation.VehicleRegistration}");
         }
 
+        Status = ParcelStatus.InTransit;
         AssociationInformation = new(bay.DockingInformation.VehicleRegistration, bay.BayId);
     }
 }
