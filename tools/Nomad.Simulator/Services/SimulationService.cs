@@ -9,6 +9,8 @@ public class SimulationService : ISimulationService
 {
     private readonly Queue<object> _queue;
     private readonly ILogger<SimulationService> _logger;
+    private int _parcelAssociationDelay;
+    private readonly Random _random;
 
     public SimulationService(
         Queue<object> queue,
@@ -18,6 +20,7 @@ public class SimulationService : ISimulationService
         _logger = logger;
         DeliveryRegionId = Guid.NewGuid().ToString();
         Parcels = new ConcurrentBag<SimulatedDto>();
+        _random = new Random(DateTime.Now.Millisecond);
     }
 
     public bool IsSimulationInProgress { get; private set; }
@@ -35,6 +38,7 @@ public class SimulationService : ISimulationService
         SimulationId = Guid.NewGuid();
         IsSimulationInProgress = true;
         Parcels.Clear();
+        _parcelAssociationDelay = startSimulationCommand.ParcelAssociationMaxDelayInSeconds;
 
         _logger.LogInformation("Starting new simulation {SimulationId} working with delivery region {DeliveryRegionId}",
             SimulationId, DeliveryRegionId);
@@ -97,4 +101,7 @@ public class SimulationService : ISimulationService
     public ConcurrentBag<SimulatedDto> Parcels { get; }
     
     public string DeliveryRegionId { get; private set; }
+
+    public int GetParcelAssociationDelay() =>
+        _random.Next(3, _parcelAssociationDelay) * 1000;
 }

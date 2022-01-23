@@ -19,6 +19,7 @@ public static class ServiceBusConstants
         public const string ParcelInductedTopic = $"{Services.ThirdPartyMachinery}/parcel-inducted";
         public const string VehicleDockedTopic = $"{Services.ThirdPartyMachinery}/vehicle-docked";
         public const string ParcelAssociatedTopic = $"{Services.ThirdPartyMachinery}/parcel-associated";
+        public const string ParcelLoadedTopic = $"{Services.ThirdPartyMachinery}/parcel-loaded";
     }
     
 }

@@ -34,6 +34,9 @@ services.AddMassTransit(massTransit =>
         cfg.Message<VehicleDockedEvent>(x =>
             x.SetEntityName(ServiceBusConstants.Topics.VehicleDockedTopic));
         
+        cfg.Message<ParcelLoadedEvent>(x =>
+            x.SetEntityName(ServiceBusConstants.Topics.ParcelLoadedTopic));
+        
         cfg.ExcludeInterfacesFromTopology();
 
         cfg.SubscriptionEndpoint(

@@ -79,6 +79,16 @@ public static class MessagingExtensions
                 configurator.ConfigureConsumeTopology = false;
                 configurator.ConfigureConsumer<VehicleDockerEventConsumer>(registration);
             });
+        
+        cfg.SubscriptionEndpoint(
+            ServiceBusConstants.AppName,
+            ServiceBusConstants.Topics.ParcelLoadedTopic,
+            configurator =>
+            {
+                configurator.PublishFaults = false;
+                configurator.ConfigureConsumeTopology = false;
+                configurator.ConfigureConsumer<ParcelLoadedEventConsumer>(registration);
+            });
     }
     
     private static void ConfigureQueues(

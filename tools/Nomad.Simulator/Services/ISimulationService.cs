@@ -18,4 +18,6 @@ public interface ISimulationService
     ConcurrentBag<SimulatedDto> Parcels { get; }
     
     public string DeliveryRegionId { get; }
+
+    int GetParcelAssociationDelay();
 }
