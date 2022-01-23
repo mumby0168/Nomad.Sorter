@@ -71,4 +71,9 @@ public class Bay : BaseEntity, IBay
             parcelCapacity,
             deliveryRegionId);
     }
+
+    public string GetDeliveryRegionId()
+    {
+        throw new NotImplementedException();
+    }
 }

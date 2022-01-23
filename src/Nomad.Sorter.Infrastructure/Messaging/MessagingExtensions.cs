@@ -15,7 +15,9 @@ namespace Nomad.Sorter.Infrastructure.Messaging;
 
 public static class MessagingExtensions
 {
-    internal static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration,
+    internal static IServiceCollection AddMessaging(
+        this IServiceCollection services, 
+        IConfiguration configuration,
         IHostEnvironment hostEnvironment)
     {
         services.AddScoped<IDispatcher, MassTransitDispatcher>();
@@ -24,15 +26,27 @@ public static class MessagingExtensions
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();
             massTransit.AddConsumer<ParcelInductedEventConsumer>();
             massTransit.AddConsumer<VehicleDockerEventConsumer>();
+            massTransit.AddConsumer<ParcelLoadedEventConsumer>();
 
-            massTransit.UsingAzureServiceBus((registration, cfg) =>
+            if (configuration.GetValue<bool>("UseAzureServiceBus"))
             {
-                cfg.Host(configuration.GetConnectionString("ServiceBus"));
-                cfg.ExcludeInterfacesFromTopology();
-                cfg.ConfigureQueues(registration);
-                cfg.ConfigureTopicSubscriptions(registration);
-                cfg.ConfigurePublishers();
-            });
+                massTransit.UsingAzureServiceBus((registration, cfg) =>
+                {
+                    cfg.Host(configuration.GetConnectionString("ServiceBus"));
+                    cfg.ExcludeInterfacesFromTopology();
+                    cfg.ConfigureQueues(registration);
+                    cfg.ConfigureTopicSubscriptions(registration);
+                    cfg.ConfigurePublishers();
+                });   
+            }
+            else
+            {
+                massTransit.UsingRabbitMq((registration, cfg) =>
+                {
+                    //TODO: Figure out how to swap.
+                    cfg.Host(configuration.GetConnectionString("RabbitMq"));
+                });
+            }
         });
 
         if (hostEnvironment.IsNotFunctionalTests())

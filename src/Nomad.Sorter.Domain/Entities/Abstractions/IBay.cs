@@ -46,4 +46,6 @@ public interface IBay
         DateTime departingUtc,
         int parcelCapacity,
         string deliveryRegionId);
+
+    string GetDeliveryRegionId();
 }

@@ -106,4 +106,14 @@ public class Parcel : BaseEntity, IParcel
         Status = ParcelStatus.InTransit;
         AssociationInformation = new(bay.DockingInformation.VehicleRegistration, bay.BayId);
     }
+
+    public void Loaded(BayId bayId)
+    {
+        if (AssociationInformation is null || AssociationInformation.BayId != bayId)
+        {
+            throw new DomainException<Parcel>($"The parcel was not expecting to be loaded into bay {bayId}");
+        }
+
+        Status = ParcelStatus.Loaded;
+    }
 }

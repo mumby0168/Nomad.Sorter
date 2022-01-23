@@ -42,4 +42,5 @@ public interface IParcel
     void Inducted();
 
     void Associate(IBay bay);
+    void Loaded(BayId bayId);
 }
