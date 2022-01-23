@@ -1,10 +1,10 @@
-using System.Configuration;
+using Convey.CQRS.Commands;
+using Convey.CQRS.Events;
 using MassTransit;
 using MassTransit.Azure.ServiceBus.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Nomad.Sorter.Application.Events.Inbound;
 using Nomad.Sorter.Application.Events.Outbound;
 using Nomad.Sorter.Application.Infrastructure;
 using Nomad.Sorter.Infrastructure.Extensions;
@@ -13,7 +13,7 @@ using Nomad.Sorter.Infrastructure.Messaging.Services;
 
 namespace Nomad.Sorter.Infrastructure.Messaging;
 
-internal static class MessagingExtensions
+public static class MessagingExtensions
 {
     internal static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration,
         IHostEnvironment hostEnvironment)
@@ -24,11 +24,11 @@ internal static class MessagingExtensions
             massTransit.AddConsumer<ParcelPreAdviceCommandConsumer>();
             massTransit.AddConsumer<ParcelInductedEventConsumer>();
             massTransit.AddConsumer<VehicleDockerEventConsumer>();
-            
 
             massTransit.UsingAzureServiceBus((registration, cfg) =>
             {
                 cfg.Host(configuration.GetConnectionString("ServiceBus"));
+                cfg.ExcludeInterfacesFromTopology();
                 cfg.ConfigureQueues(registration);
                 cfg.ConfigureTopicSubscriptions(registration);
                 cfg.ConfigurePublishers();
@@ -41,6 +41,12 @@ internal static class MessagingExtensions
         }
 
         return services;
+    }
+
+    public static void ExcludeInterfacesFromTopology(this IServiceBusBusFactoryConfigurator cfg)
+    {
+        cfg.Publish<IEvent>(configurator => configurator.Exclude = true);
+        cfg.Publish<ICommand>(configurator => configurator.Exclude = true);
     }
 
     private static void ConfigurePublishers(this IServiceBusBusFactoryConfigurator cfg)

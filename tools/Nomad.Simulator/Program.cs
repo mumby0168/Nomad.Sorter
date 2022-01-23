@@ -1,5 +1,5 @@
 using MassTransit;
-using Microsoft.Azure.Cosmos;
+using Nomad.Simulator.Consumers;
 using Nomad.Simulator.Models;
 using Nomad.Simulator.Services;
 using Nomad.Simulator.Workers;
@@ -21,21 +21,36 @@ services.AddSingleton<ISimulationService, SimulationService>();
 EndpointConvention.Map<ParcelPreAdviceCommand>(new Uri($"queue:{ServiceBusConstants.Queues.ParcelPreAdviceQueue}"));
 services.AddMassTransit(massTransit =>
 {
-    massTransit.UsingAzureServiceBus((_, cfg) =>
+    massTransit.AddConsumer<ParcelAssociatedEventConsumer>();
+
+    massTransit.UsingAzureServiceBus((reg, cfg) =>
     {
         cfg.Message<ParcelPreAdviceCommand>(x =>
             x.SetEntityName(ServiceBusConstants.Queues.ParcelPreAdviceQueue));
-        
-        cfg.Message<ParcelInductedEvent>(x => 
+
+        cfg.Message<ParcelInductedEvent>(x =>
             x.SetEntityName(ServiceBusConstants.Topics.ParcelInductedTopic));
-        
+
         cfg.Message<VehicleDockedEvent>(x =>
             x.SetEntityName(ServiceBusConstants.Topics.VehicleDockedTopic));
         
+        cfg.ExcludeInterfacesFromTopology();
+
+        cfg.SubscriptionEndpoint(
+            "nomad-simulator",
+            ServiceBusConstants.Topics.ParcelAssociatedTopic,
+            configurator =>
+            {
+                configurator.ConfigureConsumeTopology = false;
+                configurator.PublishFaults = false;
+                configurator.ConfigureConsumer<ParcelAssociatedEventConsumer>(reg);
+            });
+
         cfg.Host(builder.Configuration.GetConnectionString("ServiceBus"));
     });
 });
 
+services.AddMassTransitHostedService();
 
 var app = builder.Build();
 
@@ -44,10 +59,7 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-app.MapPost("simulation/reset", (ISimulationService simulationService) =>
-{
-    simulationService.Cancel();
-});
+app.MapPost("simulation/reset", (ISimulationService simulationService) => { simulationService.Cancel(); });
 
 app.MapPost("/simulation/new", (StartSimulationCommand command, ISimulationService simulationService) =>
 {
@@ -61,14 +73,10 @@ app.MapPost("/simulation/new", (StartSimulationCommand command, ISimulationServi
     return Results.Ok(simulationService.Parcels.ToList());
 });
 
-app.MapPost("/simulation/dock", (SimulateVehicleDockingCommand command, ISimulationService simulationService) =>
-{
-    if (simulationService.DockVehicle(command))
-    {
-        return Results.Ok("Vehicle Docked");
-    }
-
-    return Results.BadRequest("Simulation not in progress");
-});
+app.MapPost("/simulation/dock", (SimulateVehicleDockingCommand command,
+        ISimulationService simulationService) =>
+    simulationService.DockVehicle(command)
+        ? Results.Ok("Vehicle Docked")
+        : Results.BadRequest("Simulation not in progress"));
 
 app.Run();
